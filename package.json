@@ -16,6 +16,8 @@
   },
   "homepage": "https://github.com/XecKiE/UnamedIdleGame#readme",
   "dependencies": {
-    "server-static": "^2.0.5"
+    "mariadb": "^3.0.0",
+    "server-static": "^2.0.5",
+    "ws": "^8.8.1"
   }
 }
