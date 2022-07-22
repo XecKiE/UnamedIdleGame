@@ -17,9 +17,9 @@ var server = http.createServer(function onRequest (req, res) {
 	serve(req, res, finalhandler(req, res))
 })
 
-server.listen(80)
+server.listen(3000)
 
-console.log('HTTP server has been started on :80');
+console.log('HTTP server has been started on :3000');
 
 
 //Server WEBSOCKET
