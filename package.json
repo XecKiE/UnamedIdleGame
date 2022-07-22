@@ -14,5 +14,8 @@
   "bugs": {
     "url": "https://github.com/XecKiE/UnamedIdleGame/issues"
   },
-  "homepage": "https://github.com/XecKiE/UnamedIdleGame#readme"
+  "homepage": "https://github.com/XecKiE/UnamedIdleGame#readme",
+  "dependencies": {
+    "server-static": "^2.0.5"
+  }
 }
