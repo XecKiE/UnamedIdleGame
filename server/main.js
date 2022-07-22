@@ -27,20 +27,17 @@ console.log('HTTP server has been started on :80');
 
 var ws = require('ws');
 var db = require(__dirname+'/src/DB.js');
+var parser = require(__dirname+'/src/Parser.js')
 
 console.log('starting  WEBSOCKET server');
 const wss = new ws.WebSocketServer({ port: 8081, clientTracking: true });
 
 wss.on('connection', function connection(ws, req) {
 
-  ws.on('message', function message(data) {
+  ws.on('message', async function message(data) {
     console.log(`Received message ${data}`, );
+    parser.parse(data);
   });
-  await result = db.query("SELECT 1 as val");
-  console.log(result);
-  result.forEach(function(row) {
-		console.log(row.val);
-	});
   ws.send('something');
 });
 
