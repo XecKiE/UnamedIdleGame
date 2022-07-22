@@ -1,0 +1,18 @@
+{
+  "name": "unamedidlegame",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XecKiE/UnamedIdleGame.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/XecKiE/UnamedIdleGame/issues"
+  },
+  "homepage": "https://github.com/XecKiE/UnamedIdleGame#readme"
+}
