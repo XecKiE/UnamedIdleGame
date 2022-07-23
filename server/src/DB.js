@@ -8,6 +8,7 @@ const pool = mariadb.createPool({
 	port: 7013,
 	user: conf.config.DB_USER, 
 	password: conf.config.DB_PASSWORD,
+	database: 'untitled',
 	connectionLimit: 5,
 	acquireTimeout: 1500,
 });
@@ -29,7 +30,7 @@ exports.query = async (sql) => {
 	}
 	catch (err) {
 		console.log(err);
-		return null;
+		return [];
 	}
 	finally {
 		if (conn)
