@@ -131,6 +131,9 @@ html, body {
 .building:hover {
 	background-color: #333;
 }
+.building.selected {
+	background-color: #444;
+}
 
 
 

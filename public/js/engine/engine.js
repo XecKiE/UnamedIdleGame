@@ -123,7 +123,7 @@ const Engine = function(_dom, _options = {}) {
 		}
 	}
 
-	function draw(sprite_id, x, y, dx, dy, rotation = 0) {
+	function draw(sprite_id, x, y, w, h, rotation = 0) {
 		let sprite = Resources.get_img(sprite_id);
 		ctx.save();
 		ctx.translate(x + width/2, y + height/2);
@@ -131,7 +131,19 @@ const Engine = function(_dom, _options = {}) {
 			ctx.rotate(rotation);
 		}
 		// ctx.scale(...mirror);
-		ctx.drawImage(sprite, -dx/2, -dy/2, dx, dy);
+		ctx.drawImage(sprite, -w/2, -h/2, w, h);
+		ctx.restore();
+	}
+
+	function draw_rect(x, y, w, h, rotation = 0) {
+		ctx.save();
+		ctx.translate(x, y);
+		if(rotation) {
+			ctx.rotate(rotation);
+		}
+		// ctx.scale(...mirror);
+		ctx.strokeStyle = 'red';
+		ctx.strokeRect(-w/2, -h/2, w, h);
 		ctx.restore();
 	}
 
@@ -141,6 +153,7 @@ const Engine = function(_dom, _options = {}) {
 		dt: () => fps.dt,
 
 		draw: draw,
+		draw_rect: draw_rect,
 
 		resize: (callback) => listeners.resize.push(callback),
 		update: (callback) => listeners.update.push(callback),
@@ -163,6 +176,8 @@ const Map = function(_dom) {
 	let y = 0;
 	let mx = null;   // Coordonnées du point sélectionné lors du drag'n'drop de la carte
 	let my = null;   // Coordonnées du point sélectionné lors du drag'n'drop de la carte
+
+	let frozen = false; // Empêche le déplacmeent de la carte
 	
 	let listeners = {
 		'mousedown': [],
@@ -174,14 +189,14 @@ const Map = function(_dom) {
 	const y_to_screen = (t) => (t-y)*z;
 	const scale_to_screen = (t) => t*z;
 
-	const screen_to_x = (t) => (t - dom.width/2)/z + x;
-	const screen_to_y = (t) => (t - dom.height/2)/z + y;
+	const screen_to_x = (t) => (t - left - dom.width/2)/z + x;
+	const screen_to_y = (t) => (t - top - dom.height/2)/z + y;
 
 
 	const mouse_down = (event) => {
 		let _x = event.clientX - left;
 		let _y = event.clientY - top;
-		if(event.button == 0) {
+		if(event.button == 0 || event.button == 1) {
 			mx = _x;
 			my = _y;
 			window.addEventListener('mousemove', mouse_move);
@@ -189,7 +204,7 @@ const Map = function(_dom) {
 			event.preventDefault();
 		}
 
-		listeners.mousedown.forEach((callback) => callback(screen_to_x(_x), screen_to_y(_y), event.button));
+		listeners.mousedown.forEach((callback) => callback(screen_to_x(event.clientX), screen_to_y(event.clientY), event.button));
 	};
 	const release_mouse = () => {
 		mx = null;
@@ -198,20 +213,20 @@ const Map = function(_dom) {
 		window.removeEventListener('mouseup', mouse_up);
 	}
 	const mouse_up = (event) => {
-		let _x = event.clientX - left;
-		let _y = event.clientY - top;
-		if(event.button == 0) {
+		if(event.button == 0 || event.button == 1) {
 			release_mouse();
 			event.preventDefault();
 		}
-		listeners.mouseup.forEach((callback) => callback(screen_to_x(_x), screen_to_y(_y), event.button));
+		listeners.mouseup.forEach((callback) => callback(screen_to_x(event.clientX), screen_to_y(event.clientY), event.button));
 	};
 	const mouse_move = (event) => {
-		let _x = event.clientX - left;
-		let _y = event.clientY - top;
-		_move((mx - _x)/z,  (my - _y)/z);
-		mx = _x;
-		my = _y;
+		if(!frozen || Mouse.middle()) {
+			let _x = event.clientX - left;
+			let _y = event.clientY - top;
+			_move((mx - _x)/z,  (my - _y)/z);
+			mx = _x;
+			my = _y;
+		}
 		event.preventDefault();
 	};
 	const mouse_wheel = (event) => {
@@ -278,6 +293,9 @@ const Map = function(_dom) {
 		y: y_to_screen,
 		s: scale_to_screen,
 
+		screen_to_x: screen_to_x,
+		screen_to_y: screen_to_y,
+
 		focus: focus,
 		min_x: (t = 0) => x - (dom.width/2)/z + t, // Ces fonctions peuvent recevoir en paramètre une largeur de tile à prendre en compte
 		min_y: (t = 0) => y - (dom.height/2)/z + t,
@@ -288,6 +306,8 @@ const Map = function(_dom) {
 		mouseup: mouseup,
 		remove_mousedown: remove_mousedown,
 		remove_mouseup: remove_mouseup,
+		
+		set_frozen: (b) => {console.log(b); frozen = b},
 	}
 }
 

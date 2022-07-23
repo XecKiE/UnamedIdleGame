@@ -26,6 +26,8 @@ var city = null;
 Resources.load_img({
 	'wolf': 'img/favicon.png',
 	'cow': 'img/placeholder.png',
+	'hammer': 'img/sprites/hammer.png',
+	'focus': 'img/sprites/focus.png',
 	'grass': 'img/sprites/grass.png',
 	'desert': 'img/sprites/desert.png',
 	'house': 'img/sprites/house.png',
@@ -43,12 +45,12 @@ window.onload = function() {
 
 		map = engine.add_map();
 
-		city = City();
-		city.init(map);
+		city = City(engine, map);
+		city.init();
 
 
 		engine.render(() => {
-			city.render(engine, map);
+			city.render();
 		});
 
 

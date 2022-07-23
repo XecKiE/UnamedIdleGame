@@ -1,6 +1,8 @@
-import {Random} from './engine/engine.js'
+import {Random, Mouse} from './engine/engine.js'
 
-const City = function() {
+const City = function(_engine, _map) {
+	let engine = _engine;
+	let map = _map;
 	let tiles = [];
 
 	let available_buildings = [
@@ -28,7 +30,7 @@ const City = function() {
 		}
 	}
 
-	function render(engine, map) {
+	function render() {
 		// console.log(selection);
 		let imin = Math.max(0, Math.floor(map.min_x(32)/64));
 		let imax = Math.min(tiles.length, Math.ceil(map.max_x(32)/64));
@@ -52,6 +54,13 @@ const City = function() {
 				}
 			}
 		}
+
+		if(selection) {
+			let pos = Mouse.position();
+			let tile = coord_to_tile(map.screen_to_x(pos.x), map.screen_to_y(pos.y));
+			engine.draw('focus', map.x(tile.x*64), map.y(tile.y*64), map.s(64), map.s(64));
+			engine.draw_rect(map.x(tile.x*64), map.y(tile.y*64), map.s(64), map.s(64));
+		}
 	}
 
 	function mousedown(x, y, button) {
@@ -66,8 +75,11 @@ const City = function() {
 		clicked_tile = null;
 	}
 
-	function clicked(x, y, button) {
-		console.log(x, y);
+	function click(x, y, button) {
+		if(selection) {
+			console.log(x, y);
+			selection.onclick(x, y, button);
+		}
 	}
 
 	function coord_to_tile(x, y) {
@@ -76,9 +88,30 @@ const City = function() {
 			y: Math.floor((y+32)/64),
 		}
 	}
+
+	function select_building(dom, building) {
+		if(dom.classList.contains('selected')) {
+			dom.classList.remove('selected');
+			map.set_frozen(false);
+			selection = null;
+		} else {
+			document.querySelectorAll('.building').forEach((d) => d.classList.remove('selected'));
+			dom.classList.add('selected');
+			map.set_frozen(true);
+			selection = {
+				type: 'construct',
+				value: building,
+				onclick: (x, y, button) => {
+					if(button == 0) {
+						tiles[x][y].building = building;
+					}
+				},
+			};
+		}
+	}
 		
 
-	function init(map) {
+	function init() {
 		map.focus(64*64, 64*64, .5);
 
 
@@ -92,7 +125,7 @@ const City = function() {
 			available_buildings.forEach((building) => {
 				let t = document.createElement('div');
 				t.classList.add('building');
-				t.addEventListener('click', () => selection = {type: 'construct', value: building});
+				t.addEventListener('click', () => select_building(t, building));
 				let tt = document.createElement('div');
 				tt.classList.add('building_name');
 				tt.innerText = building.toUpperCase();
@@ -116,10 +149,6 @@ const City = function() {
 		// Dé-initialise les inputs avec la map
 		map.remove_mousedown(mousedown);
 		map.remove_mouseup(mouseup);
-	}
-
-	function click(x, y, button) {
-		console.log(x, y, button);
 	}
 
 	return {
