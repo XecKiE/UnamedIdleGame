@@ -44,22 +44,12 @@ window.onload = function() {
 		city = City();
 
 		engine.render(() => {
-			for(var i=-20 ; i<21 ; i++) {
-				for(var j=-20 ; j<21 ; j++) {
-					engine.draw(i%5 == 0 || j%5 == 0 ?'wolf' : 'cow', map.x(i*100), map.y(j*100), map.s(100), map.s(100));
-				}
-			}
 
-			engine.draw('cow', map.x(-engine.w()/6), map.y(-engine.h()/4), map.s(256), map.s(256), engine.dt()%Math.PI*2);
-			engine.draw('wolf', map.x(engine.w()/6), map.y(-engine.h()/4), map.s(256), map.s(256), -engine.dt()%Math.PI*2);
-			engine.draw('wolf', map.x(-engine.w()/6), map.y(engine.h()/4), map.s(256), map.s(256), -engine.dt()%Math.PI*2);
-			engine.draw('cow', map.x(engine.w()/6), map.y(engine.h()/4), map.s(256), map.s(256), engine.dt()%Math.PI*2);
-
-			// city.render(engine, map);
+			city.render(engine, map);
 		});
+		// Initialise le menu de construction
 	})
 
 
 
-	// Initialise le menu de construction
 }
