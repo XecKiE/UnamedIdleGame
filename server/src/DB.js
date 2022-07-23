@@ -26,17 +26,16 @@ exports.query = async (sql) => {
 	try {
 		conn = await pool.getConnection();
 		var rows = await conn.query(sql);
-
-	}
-	catch (err) {
-		console.log(err);
-		return [];
-	}
-	finally {
 		if (conn)
 		{
 			conn.release();
 			return rows;
 		}
 	}
+	catch (err) {
+		console.log(err);
+		console.log('on returne null');
+		return null;
+	}
+
 }

@@ -21,10 +21,10 @@ function build_taverne() {
 		action: 'BUILD',
 		options: {
 			city_id:1,
-			type:2
-			x:5
-			y:7
-			rotation:0
+			type:2,
+			x:5,
+			y:7,
+			rotation:0,
 		}
 	};
 	socket.send(JSON.stringify(data));

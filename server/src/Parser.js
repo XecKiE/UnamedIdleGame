@@ -3,9 +3,11 @@ const users = require(__dirname+'/User.js');
 
 const func_map = {
 	'BUILD': build.construct,
+	'UPDATE': build.update,
 	'DESTRUCT': build.destruct,
+	'TERRAFORM': build.construct,
 	'GET': {
-
+		/*'CITY_TILE': get.exportModifiedCityTile*/
 	},
 
 };
