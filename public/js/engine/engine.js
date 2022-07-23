@@ -67,6 +67,11 @@ const Engine = function(_dom, _options = {}) {
 		can.setAttribute('width', width);
 		can.setAttribute('height', height);
 		listeners['resize'].forEach((callback) => callback(this));
+
+		// Si on le met dans load ça marche pas, je ne sais pas pourquoi
+		if(options.pixelated) {
+			ctx.imageSmoothingEnabled = false;
+		}
 	}
 
 	function loop() {
@@ -98,11 +103,11 @@ const Engine = function(_dom, _options = {}) {
 			ctx.fillRect(0, 0, width, height);
 		}
 
-		try {
+		// try {
 			listeners['render'].forEach((callback) => callback(this));
-		} catch (error) {
-			console.error(error);
-		}
+		// } catch (error) {
+		// 	console.error(error);
+		// }
 
 		// Debug informations
 		if(options.show_debug) {
@@ -151,6 +156,8 @@ const Engine = function(_dom, _options = {}) {
  */
 const Map = function(_dom) {
 	let dom = _dom;
+	let top = null;
+	let left = null;
 	let z = 1;       // Zoom
 	let x = 0;
 	let y = 0;
@@ -160,8 +167,8 @@ const Map = function(_dom) {
 	
 	const mouse_down = (event) => {
 		if(event.button == 0) {
-			mx = event.clientX;
-			my = event.clientY;
+			mx = event.clientX - left;
+			my = event.clientY - top;
 			window.addEventListener('mousemove', mouse_move);
 			window.addEventListener('mouseup', mouse_up);
 			event.preventDefault();
@@ -180,14 +187,16 @@ const Map = function(_dom) {
 		}
 	};
 	const mouse_move = (event) => {
-		move((mx - event.clientX)/z,  (my - event.clientY)/z);
-		mx = event.clientX;
-		my = event.clientY;
+		let _x = event.clientX - left;
+		let _y = event.clientY - top;
+		move((mx - _x)/z,  (my - _y)/z);
+		mx = _x;
+		my = _y;
 		event.preventDefault();
 	};
 	const mouse_wheel = (event) => {
 		let pos = Mouse.position();
-		zoom(1-(event.deltaY/1000), pos.x, pos.y);
+		zoom(1-(event.deltaY/1000), pos.x-left, pos.y-top);
 	};
 	window.addEventListener('contextmenu', (event) => {
 
@@ -197,6 +206,16 @@ const Map = function(_dom) {
 	window.addEventListener('contextmenu', (event) => {
 		release_mouse();
 	});
+
+	function resize() {
+		let rect = dom.getBoundingClientRect();
+		top = rect.top;
+		left = rect.left;
+	}
+	window.addEventListener('resize', (event) => {
+		resize();
+	});
+	resize();
 
 
 	function zoom(_z, _x, _y) {
@@ -229,6 +248,10 @@ const Map = function(_dom) {
 		s: (t) => t*z,      // Scale
 
 		focus: focus,
+		min_x: (t = 0) => x - (dom.width/2)/z + t, // Ces fonctions peuvent recevoir en paramètre une largeur de tile à prendre en compte
+		min_y: (t = 0) => y - (dom.height/2)/z + t,
+		max_x: (t = 0) => x + (dom.width/2)/z + t,
+		max_y: (t = 0) => y + (dom.height/2)/z + t,
 	}
 }
 
@@ -318,6 +341,41 @@ const Touches = function() {
 	}
 }();
 
+const Random = function() {
+	/**
+	* Génère un entier aléatoire
+	* @param  {int} a Premier entier
+	* @param  {int} b Deuxième entier [default: 0] (max exclut)
+	* @return {int}   L'entier aléatoire
+	*/
+	function i_rand(a, b) {
+		if(typeof b != 'undefined') {
+			return Math.floor(Math.random()*(b-a))+a;
+		} else {
+			return Math.floor(Math.random()*a);
+		}
+	}
+
+	/**
+	* Génère un réel aléatoire
+	* @param  {float} a Premier réel
+	* @param  {float} b Deuxième réel [default: 0] (max exclut)
+	* @return {float}     Le réel aléatoire
+	*/
+	function f_rand(a, b) {
+		if(typeof b != 'undefined') {
+			return Math.random() * (b - a) + a;
+		} else {
+			return Math.random() * a;
+		}
+	}
+
+	return {
+		i_rand: i_rand,
+		f_rand: f_rand,
+	}
+}();
 
 
-export {Engine, Map, Resources, Keyboard, Mouse, Touches};
+
+export {Engine, Map, Resources, Keyboard, Mouse, Touches, Random};
