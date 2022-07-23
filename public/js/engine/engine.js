@@ -118,15 +118,15 @@ const Engine = function(_dom, _options = {}) {
 		}
 	}
 
-	function draw(sprite_id, x, y, rotation = 0) {
+	function draw(sprite_id, x, y, dx, dy, rotation = 0) {
 		let sprite = Resources.get_img(sprite_id);
 		ctx.save();
-		ctx.translate(x, y);
+		ctx.translate(x + width/2, y + height/2);
 		if(rotation) {
 			ctx.rotate(rotation);
 		}
 		// ctx.scale(...mirror);
-		ctx.drawImage(sprite, -sprite.naturalWidth/2, -sprite.naturalHeight/2, sprite.naturalWidth, sprite.naturalHeight);
+		ctx.drawImage(sprite, -dx/2, -dy/2, dx, dy);
 		ctx.restore();
 	}
 
@@ -140,9 +140,169 @@ const Engine = function(_dom, _options = {}) {
 		resize: (callback) => listeners.resize.push(callback),
 		update: (callback) => listeners.update.push(callback),
 		render: (callback) => listeners.render.push(callback),
+
+		add_map: () => Map(can),
 	}
 }
 
 
+/**
+ * Permet de suivre l'état d'une carte type Google Maps
+ */
+const Map = function(_dom) {
+	let dom = _dom;
+	let z = 1;       // Zoom
+	let x = 0;
+	let y = 0;
+	let mx = null;   // Coordonnées du point sélectionné lors du drag'n'drop de la carte
+	let my = null;   // Coordonnées du point sélectionné lors du drag'n'drop de la carte
+	
+	
+	const mouse_down = (event) => {
+		if(event.button == 0) {
+			mx = event.clientX;
+			my = event.clientY;
+			window.addEventListener('mousemove', mouse_move);
+			window.addEventListener('mouseup', mouse_up);
+			event.preventDefault();
+		}
+	};
+	const release_mouse = () => {
+		mx = null;
+		my = null;
+		window.removeEventListener('mousemove', mouse_move);
+		window.removeEventListener('mouseup', mouse_up);
+	}
+	const mouse_up = (event) => {
+		if(event.button == 0) {
+			release_mouse();
+			event.preventDefault();
+		}
+	};
+	const mouse_move = (event) => {
+		move((mx - event.clientX)/z,  (my - event.clientY)/z);
+		mx = event.clientX;
+		my = event.clientY;
+		event.preventDefault();
+	};
+	const mouse_wheel = (event) => {
+		let pos = Mouse.position();
+		zoom(1-(event.deltaY/1000), pos.x, pos.y);
+	};
+	window.addEventListener('contextmenu', (event) => {
 
-export {Engine, Resources};
+	});
+	_dom.addEventListener('mousedown', mouse_down);
+	_dom.addEventListener('wheel', mouse_wheel);
+	window.addEventListener('contextmenu', (event) => {
+		release_mouse();
+	});
+
+
+	function zoom(_z, _x, _y) {
+		var t = z;
+		z = Math.max(/*TODO 1*/0.3, Math.min(z*_z, 4));
+		x -= ((_x/t)-dom.width*t) - (_x/z-dom.width*z);
+		y -= ((_y/t)-dom.height*t) - (_y/z-dom.height*z);
+	}
+	function move(_x, _y) {
+		x -= _x;
+		y -= _y;
+	}
+
+	return {
+		x: (t) => (t+x)*z,
+		y: (t) => (t+y)*z,
+		s: (t) => t*z,      // Scale
+	}
+}
+
+
+const Keyboard = function() {
+	let keys = {};
+
+	window.addEventListener('keydown', (event) => {
+		keys[event.code] = true;
+	});
+	window.addEventListener('keyup', (event) => {
+		keys[event.code] = false;
+	});
+
+	return {
+		pressed: (key_code) => keys[key_code],
+	}
+}();
+
+
+const Mouse = function() {
+	let x = 0;
+	let y = 0;
+	let left = false;
+	let right = false;
+	let middle = false;
+
+	window.addEventListener('mousemove', (event) => {
+		x = event.clientX;
+		y = event.clientY;
+	});
+	window.addEventListener('mousedown', (event) => {
+		switch(event.button) {
+			case 0: left   = true; break;
+			case 1: middle = true; break;
+			case 2: right  = true; break;
+		}
+	});
+	window.addEventListener('mouseup', (event) => {
+		switch(event.button) {
+			case 0: left   = false; break;
+			case 1: middle = false; break;
+			case 2: right  = false; break;
+		}
+
+	});
+	window.addEventListener('wheel', (event) => {
+
+	});
+
+	function disable_right_clic() {
+		window.oncontextmenu = (event) => event.preventDefault();
+	}
+
+	return {
+		position: () => {return {x: x, y: y};},
+		left:     () => left,
+		middle:   () => middle,
+		right:    () => right,
+
+		disable_right_clic: disable_right_clic,
+	}
+}();
+
+
+const Touches = function() {
+	let touches = {};
+
+	window.addEventListener('touchstart',  (event) => {
+		[...event.touches].map((a) => {
+			return {x: a.clientX, y: a.clientY};
+		});
+	});
+	window.addEventListener('touchend',  (event) => {
+		[...event.touches].map((a) => {
+			return {x: a.clientX, y: a.clientY};
+		});
+	});
+	window.addEventListener('touchmove',  (event) => {
+		[...event.touches].map((a) => {
+			return {x: a.clientX, y: a.clientY};
+		});
+	});
+
+	return {
+		get: touches,
+	}
+}();
+
+
+
+export {Engine, Map, Resources, Keyboard, Mouse, Touches};
