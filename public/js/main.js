@@ -16,7 +16,7 @@
 // }
 
 
-import {Engine, Resources, Map} from './engine/engine.js';
+import {Engine, Resources, Map, Mouse} from './engine/engine.js';
 import City from './city.js';
 
 
@@ -27,6 +27,7 @@ Resources.load_img({
 	'wolf': 'img/favicon.png',
 	'cow': 'img/placeholder.png',
 	'grass': 'img/sprites/grass.png',
+	'desert': 'img/sprites/desert.png',
 	'house': 'img/sprites/house.png',
 	'watchtower': 'img/sprites/watchtower.png',
 	'tree0': 'img/sprites/tree0.png',
@@ -34,22 +35,23 @@ Resources.load_img({
 	'tree2': 'img/sprites/tree2.png',
 	'tree3': 'img/sprites/tree3.png',
 })
+Mouse.disable_context_menu();
 window.onload = function() {
 	document.querySelectorAll('canvas').forEach((can) => {
+
 		engine = Engine(can);
 
 		map = engine.add_map();
-		// map.focus(64*64, 64*64, .5);
 
 		city = City();
+		city.init(map);
+
 
 		engine.render(() => {
-
 			city.render(engine, map);
 		});
-		// Initialise le menu de construction
+
+
+		// city.deinit(map);
 	})
-
-
-
 }

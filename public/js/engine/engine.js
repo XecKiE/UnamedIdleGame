@@ -164,15 +164,32 @@ const Map = function(_dom) {
 	let mx = null;   // Coordonnées du point sélectionné lors du drag'n'drop de la carte
 	let my = null;   // Coordonnées du point sélectionné lors du drag'n'drop de la carte
 	
-	
+	let listeners = {
+		'mousedown': [],
+		'mouseup': [],
+	}
+
+
+	const x_to_screen = (t) => (t-x)*z;
+	const y_to_screen = (t) => (t-y)*z;
+	const scale_to_screen = (t) => t*z;
+
+	const screen_to_x = (t) => (t - dom.width/2)/z + x;
+	const screen_to_y = (t) => (t - dom.height/2)/z + y;
+
+
 	const mouse_down = (event) => {
+		let _x = event.clientX - left;
+		let _y = event.clientY - top;
 		if(event.button == 0) {
-			mx = event.clientX - left;
-			my = event.clientY - top;
+			mx = _x;
+			my = _y;
 			window.addEventListener('mousemove', mouse_move);
 			window.addEventListener('mouseup', mouse_up);
 			event.preventDefault();
 		}
+
+		listeners.mousedown.forEach((callback) => callback(screen_to_x(_x), screen_to_y(_y), event.button));
 	};
 	const release_mouse = () => {
 		mx = null;
@@ -181,31 +198,48 @@ const Map = function(_dom) {
 		window.removeEventListener('mouseup', mouse_up);
 	}
 	const mouse_up = (event) => {
+		let _x = event.clientX - left;
+		let _y = event.clientY - top;
 		if(event.button == 0) {
 			release_mouse();
 			event.preventDefault();
 		}
+		listeners.mouseup.forEach((callback) => callback(screen_to_x(_x), screen_to_y(_y), event.button));
 	};
 	const mouse_move = (event) => {
 		let _x = event.clientX - left;
 		let _y = event.clientY - top;
-		move((mx - _x)/z,  (my - _y)/z);
+		_move((mx - _x)/z,  (my - _y)/z);
 		mx = _x;
 		my = _y;
 		event.preventDefault();
 	};
 	const mouse_wheel = (event) => {
 		let pos = Mouse.position();
-		zoom(1-(event.deltaY/1000), pos.x-left, pos.y-top);
+		_zoom(1-(event.deltaY/1000), pos.x-left, pos.y-top);
 	};
-	window.addEventListener('contextmenu', (event) => {
-
-	});
 	_dom.addEventListener('mousedown', mouse_down);
 	_dom.addEventListener('wheel', mouse_wheel);
 	window.addEventListener('contextmenu', (event) => {
 		release_mouse();
 	});
+
+
+	function _zoom(_z, _x, _y) {
+		var t = z;
+		z = Math.max(/*TODO 1*/0.3, Math.min(z*_z, 4));
+
+		_x -= dom.width/2
+		_y -= dom.height/2
+
+		x += _x/t - _x/z;
+		y += _y/t - _y/z;
+	}
+	function _move(_x, _y) {
+		x += _x;
+		y += _y;
+	}
+
 
 	function resize() {
 		let rect = dom.getBoundingClientRect();
@@ -218,22 +252,6 @@ const Map = function(_dom) {
 	resize();
 
 
-	function zoom(_z, _x, _y) {
-		var t = z;
-		z = Math.max(/*TODO 1*/0.3, Math.min(z*_z, 4));
-
-		_x -= dom.width/2
-		_y -= dom.height/2
-
-		x += _x/t - _x/z;
-		y += _y/t - _y/z;
-
-	}
-	function move(_x, _y) {
-		x += _x;
-		y += _y;
-	}
-
 	function focus(_x, _y, _z = null) {
 		x = _x;
 		y = _y;
@@ -242,16 +260,34 @@ const Map = function(_dom) {
 		}
 	}
 
+	function mousedown(callback) {
+		listeners['mousedown'].push(callback);
+	}
+	function mouseup(callback) {
+		listeners['mouseup'].push(callback);
+	}
+	function remove_mousedown(callback) {
+		listeners['mousedown'] = listeners['mousedown'].filter((a) => a !== callback);
+	}
+	function remove_mouseup(callback) {
+		listeners['mouseup'] = listeners['mouseup'].filter((a) => a !== callback);
+	}
+
 	return {
-		x: (t) => (t-x)*z,
-		y: (t) => (t-y)*z,
-		s: (t) => t*z,      // Scale
+		x: x_to_screen,
+		y: y_to_screen,
+		s: scale_to_screen,
 
 		focus: focus,
 		min_x: (t = 0) => x - (dom.width/2)/z + t, // Ces fonctions peuvent recevoir en paramètre une largeur de tile à prendre en compte
 		min_y: (t = 0) => y - (dom.height/2)/z + t,
 		max_x: (t = 0) => x + (dom.width/2)/z + t,
 		max_y: (t = 0) => y + (dom.height/2)/z + t,
+
+		mousedown: mousedown,
+		mouseup: mouseup,
+		remove_mousedown: remove_mousedown,
+		remove_mouseup: remove_mouseup,
 	}
 }
 
@@ -302,7 +338,7 @@ const Mouse = function() {
 
 	});
 
-	function disable_right_clic() {
+	function disable_context_menu() {
 		window.oncontextmenu = (event) => event.preventDefault();
 	}
 
@@ -312,7 +348,7 @@ const Mouse = function() {
 		middle:   () => middle,
 		right:    () => right,
 
-		disable_right_clic: disable_right_clic,
+		disable_context_menu: disable_context_menu,
 	}
 }();
 
