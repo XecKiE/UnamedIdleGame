@@ -18,6 +18,7 @@
 
 import {Engine, Resources, Map, Mouse} from './engine/engine.js';
 import City from './city.js';
+import Socket from './socket.js';
 
 
 var engine = null;
@@ -38,8 +39,12 @@ Resources.load_img({
 	'tree3': 'img/sprites/tree3.png',
 })
 Mouse.disable_context_menu();
-window.onload = function() {
-	document.querySelectorAll('canvas').forEach((can) => {
+window.onload = async function() {
+	document.querySelectorAll('canvas').forEach(async (can) => {
+		let truc = await Socket.send('GET CITY_TILE', {city_id: 1});
+		console.log(truc);
+		truc = await Socket.send('CHOSE CITY_TILE', {city_id: 1});
+		console.log(truc);
 
 		engine = Engine(can);
 

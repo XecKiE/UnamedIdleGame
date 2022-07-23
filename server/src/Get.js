@@ -27,7 +27,7 @@ exports.exportModifiedCityTile = async (options) => {
 			}
 			result.push(line);
 		});
-		return JSON.stringify(result);
+		return result;
 	}
 }
 
@@ -50,7 +50,7 @@ exports.exportPlayerCity = async (options) => {
 
 			result.push(line);
 		});
-		return JSON.stringify(result);
+		return result;
 	}
 }
 

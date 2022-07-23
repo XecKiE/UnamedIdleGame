@@ -23,16 +23,18 @@ async function _checkConnection(data, user_uuid) {
 				var response = {
 					status: 'success',
 					data: 'user_connected',
+					idr: data.id,
 				};
-				return JSON.stringify(response);
+				return response;
 			}
 			else {
 				var response = {
 					status: 'error',
 					type: 'user_invalid_credentials',
 					error: 'user login/password invalid',
+					idr: data.id,
 				};
-				return JSON.stringify(response);
+				return response;
 			}
 		}
 		else {
@@ -40,8 +42,9 @@ async function _checkConnection(data, user_uuid) {
 				status: 'error',
 				type: 'user_already_connected',
 				error: 'user is already connected',
+				idr: data.id,
 			};
-			return JSON.stringify(response);
+			return response;
 		}
 	}
 };
@@ -55,12 +58,15 @@ exports.parse = async (socket_data, user_uuid) => {
 			status: 'error',
 			type: 'user_not_connected',
 			error: 'user is not connected',
+			idr: data.id,
 		};
 		return JSON.stringify(response);
 	}
 	else if (data.action == 'CONNECT')
 	{
-		return _checkConnection(data, user_uuid);
+		let response = _checkConnection(data, user_uuid);
+		response.idr = data.id;
+		return JSON.stringify(response);
 	}
 
 	var data = JSON.parse(socket_data);
@@ -70,7 +76,10 @@ exports.parse = async (socket_data, user_uuid) => {
 	try {
 		data.options.user_id = user.user_id;
 		var response = await data.action.split(' ').reduce((a, b) => a[b], func_map)(data.options);
-		return JSON.stringify(response);
+		return JSON.stringify({
+			response: response,
+			idr: data.id,
+		});
 	}
 	catch (err) {
 		console.log(err);
@@ -78,6 +87,7 @@ exports.parse = async (socket_data, user_uuid) => {
 			status: 'error',
 			type: 'func_error',
 			error: data.action+' does not exist',
+			idr: data.id,
 		};
 		return JSON.stringify(response);
 	}
