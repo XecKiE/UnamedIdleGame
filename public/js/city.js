@@ -2,12 +2,12 @@ import {Random} from './engine/engine.js'
 
 const City = function() {
 	let tiles = [];
-	for(let i=0 ; i<100 ; i++) {
+	for(let i=0 ; i<127 ; i++) {
 		tiles[i] = [];
-		for(let j=0 ; j<100 ; j++) {
+		for(let j=0 ; j<127 ; j++) {
 			tiles[i][j] = {
 				land: 'grass',
-				building: Random.i_rand(2) == 1 ? 'house' : Random.i_rand(2) == 1 ? 'tree'+Random.i_rand(4) : null,
+				building: Random.i_rand(5) == 1 ? 'tree'+Random.i_rand(4) : null,
 				// building: Random.i_rand(2) == 1 ? 'house_top' : Random.i_rand(2) == 1 ? 'tree_top'+Random.i_rand(4) : null,
 				tilt_x: Random.i_rand(21)-10,
 				tilt_y: Random.i_rand(21)-10,
@@ -17,7 +17,6 @@ const City = function() {
 			// 	tiles[i][j].rotation = Random.i_rand(5)*Math.PI/2
 			// }
 		}
-		console.log(Random.f_rand(Math.PI*2));
 	}
 
 	function render(engine, map) {
