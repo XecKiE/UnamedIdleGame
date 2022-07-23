@@ -147,7 +147,7 @@ const Engine = function(_dom, _options = {}) {
 
 
 /**
- * Permet de suivre l'état d'une carte type Google Maps
+ * Permet de suivre l'état d'une carte type Google Maps et de gérer les déplacements dessus
  */
 const Map = function(_dom) {
 	let dom = _dom;
@@ -202,18 +202,33 @@ const Map = function(_dom) {
 	function zoom(_z, _x, _y) {
 		var t = z;
 		z = Math.max(/*TODO 1*/0.3, Math.min(z*_z, 4));
-		x -= ((_x/t)-dom.width*t) - (_x/z-dom.width*z);
-		y -= ((_y/t)-dom.height*t) - (_y/z-dom.height*z);
+
+		_x -= dom.width/2
+		_y -= dom.height/2
+
+		x += _x/t - _x/z;
+		y += _y/t - _y/z;
+
 	}
 	function move(_x, _y) {
-		x -= _x;
-		y -= _y;
+		x += _x;
+		y += _y;
+	}
+
+	function focus(_x, _y, _z = null) {
+		x = _x;
+		y = _y;
+		if(_z !== null) {
+			z = _z;
+		}
 	}
 
 	return {
-		x: (t) => (t+x)*z,
-		y: (t) => (t+y)*z,
+		x: (t) => (t-x)*z,
+		y: (t) => (t-y)*z,
 		s: (t) => t*z,      // Scale
+
+		focus: focus,
 	}
 }
 
