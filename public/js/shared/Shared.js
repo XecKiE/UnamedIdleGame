@@ -15,7 +15,7 @@ const CB = {
 
 // Constantes Building inversées
 const CBR = {};
-for(let i in CBs) {
+for(let i in CB) {
 	CBR[CB[i]] = i;
 }
 
@@ -27,7 +27,7 @@ const CT = {
 }
 // Constantes Terrain inversées
 const CTR = {};
-for(let i in CTs) {
+for(let i in CT) {
 	CTR[CT[i]] = i;
 }
 
@@ -40,6 +40,6 @@ exports.checkOptions = (options, needed) => {
 	})
 	return true;
 }
-exports.building_type = building_typ
+exports.cb = CB
 
 
