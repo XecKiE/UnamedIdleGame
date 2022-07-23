@@ -1,18 +1,36 @@
+// Constantes Building
+const CB = {
+	PLACE:       1,
+	ROUTE:       2,
+	TAVERNE:     3,
+	MAISON:      4,
+	AUTEL:       5,
+	TEMPLE:      6,
+	PANTHEON:    7,
+	POSTE_GARDE: 8,
+	CASERNE:     9,
+	MINAGE_FER:  1,
+	MINAGE_BOIS: 1,
+}
 
+// Constantes Building inversées
+const CBR = {};
+for(let i in CBs) {
+	CBR[CB[i]] = i;
+}
 
-const building_type = {
-	1: 'PLACE',
-	2: 'ROUTE',
-	3: 'TAVERNE',
-	4: 'MAISON',
-	5: 'AUTEL',
-	6: 'TEMPLE',
-	7: 'PANTHEON',
-	8: 'POSTE_GARDE',
-	9: 'CASERNE',
-	10: 'MINAGE_FER',
-	11: 'MINAGE_BOIS',
-};
+// Constantes Terrain
+const CT = {
+	PLAINE: 1,
+	DESERT: 2,
+	EAU: 3,
+}
+// Constantes Terrain inversées
+const CTR = {};
+for(let i in CTs) {
+	CTR[CT[i]] = i;
+}
+
 
 exports.checkOptions = (options, needed) => {
 	needed.forEach(function(a) {
@@ -22,4 +40,6 @@ exports.checkOptions = (options, needed) => {
 	})
 	return true;
 }
-exports.building_type = building_type;
+exports.building_type = building_typ
+
+
