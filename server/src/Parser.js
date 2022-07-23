@@ -8,7 +8,8 @@ const func_map = {
 	'DESTRUCT': build.destruct,
 	'TERRAFORM': build.construct,
 	'GET': {
-		'CITY_TILE': get.exportModifiedCityTile
+		'CITY_TILE': get.exportModifiedCityTile,
+		'PLAYER_CITY': get.exportPlayerCity,
 	},
 
 };
@@ -67,6 +68,7 @@ exports.parse = async (socket_data, user_uuid) => {
 	console.log(data.action);
 	console.log(data.action.split(' '));
 	try {
+		data.options.user_id = user.user_id;
 		var response = await data.action.split(' ').reduce((a, b) => a[b], func_map)(data.options);
 		return JSON.stringify(response);
 	}

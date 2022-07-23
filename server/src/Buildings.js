@@ -6,8 +6,7 @@ var shared = require(process.cwd()+'/public/js/shared/Shared.js');
 exports.construct = async (options) => {
 
 	console.log(shared.checkOptions(options, ['city_id', 'type', 'x', 'y', 'rotation']));
-	console.log(shared.building_type.hasOwnProperty(options.type));
-	if (_checkOptions(options, ['city_id', 'type', 'x', 'y', 'rotation']) && shared.building_type.hasOwnProperty(options.type)) {
+	if (shared.checkOptions(options, ['city_id', 'type', 'x', 'y', 'rotation']) && shared.cbr[options.type]) {
 
 		let data = await db.query(`
 			INSERT INTO tiles(city_id, tile_x, tile_y, building_type_id, building_level, building_rotation, health)

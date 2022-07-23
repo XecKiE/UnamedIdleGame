@@ -40,6 +40,7 @@ exports.checkOptions = (options, needed) => {
 	})
 	return true;
 }
-exports.cb = CB
+exports.cb = CB;
+exports.cbr = CBR;
 
 
