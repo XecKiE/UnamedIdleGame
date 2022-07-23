@@ -1,20 +1,11 @@
 var db = require(__dirname+'/DB.js');
-var shared = require(process.cwd()+'/public/shared/Shared.js');
-
-function _checkOptions(options, needed) {
-	needed.forEach(function(a) {
-		if(!options.hasOwnProperty(a)) {
-				return false;
-		}
-	})
-	return true;
-}
+var shared = require(process.cwd()+'/public/js/shared/Shared.js');
 
 
 //fonction facile sans gestion de l'economie
 exports.construct = async (options) => {
 
-	console.log(_checkOptions(options, ['city_id', 'type', 'x', 'y', 'rotation']));
+	console.log(shared.checkOptions(options, ['city_id', 'type', 'x', 'y', 'rotation']));
 	console.log(shared.building_type.hasOwnProperty(options.type));
 	if (_checkOptions(options, ['city_id', 'type', 'x', 'y', 'rotation']) && shared.building_type.hasOwnProperty(options.type)) {
 
@@ -25,10 +16,8 @@ exports.construct = async (options) => {
 		console.log('data:');
 		console.log(data);
 		console.log(data === null);
-		if (data === null) {
-			console.log('cest nul');
-		}
-		if (data !== null && data.affectedRows == 1) {
+
+		if (data !== [] && data.affectedRows == 1) {
 			console.log(`Je construit une ${options.type}`);
 			var response = {
 				status: 'success',
@@ -59,7 +48,7 @@ exports.construct = async (options) => {
 
 exports.update = async (options) => {
 	
-	if (_checkOptions(options, ['building_id'])) {
+	if (shared.checkOptions(options, ['building_id'])) {
 			let data = await db.query(`
 				UPDATE buildings
 				SET building_level = building_level + 1

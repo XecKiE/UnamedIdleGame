@@ -1,5 +1,6 @@
 const build = require(__dirname+'/Buildings.js');
 const users = require(__dirname+'/User.js');
+const get = require(__dirname+'/Get.js');
 
 const func_map = {
 	'BUILD': build.construct,
@@ -7,7 +8,7 @@ const func_map = {
 	'DESTRUCT': build.destruct,
 	'TERRAFORM': build.construct,
 	'GET': {
-		/*'CITY_TILE': get.exportModifiedCityTile*/
+		'CITY_TILE': get.exportModifiedCityTile
 	},
 
 };

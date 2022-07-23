@@ -1,3 +1,5 @@
+
+
 const building_type = {
 	1: 'PLACE',
 	2: 'ROUTE',
@@ -12,5 +14,12 @@ const building_type = {
 	11: 'MINAGE_BOIS',
 };
 
-
-exports building_type = building_type;
+exports.checkOptions = (options, needed) => {
+	needed.forEach(function(a) {
+		if(!options.hasOwnProperty(a)) {
+				return false;
+		}
+	})
+	return true;
+}
+exports.building_type = building_type;

@@ -35,7 +35,7 @@ exports.query = async (sql) => {
 	catch (err) {
 		console.log(err);
 		console.log('on returne null');
-		return null;
+		return [];
 	}
 
 }

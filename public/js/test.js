@@ -17,7 +17,7 @@ socket.addEventListener('message', function (event) {
 
 function build_taverne() {
 	console.log('coucou');
-	var data = {
+	/*var data = {
 		action: 'BUILD',
 		options: {
 			city_id:1,
@@ -26,6 +26,13 @@ function build_taverne() {
 			y:7,
 			rotation:0,
 		}
+	};*/
+	var data = {
+		action: 'GET CITY_TILE',
+		options: {
+			city_id: 1,
+		}
+
 	};
 	socket.send(JSON.stringify(data));
 }
