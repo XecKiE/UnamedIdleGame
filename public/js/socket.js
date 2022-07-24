@@ -10,7 +10,7 @@ const Socket = function() {
 
 
 	function init() {
-		socket = new WebSocket('wss://untitled.xeck.fr');
+		socket = new WebSocket('ws://localhost:8081');
 		socket.onopen = onopen;
 		socket.onerror = onerror;
 		socket.onmessage = onmessage;

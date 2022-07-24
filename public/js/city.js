@@ -1,6 +1,8 @@
 import {Random, Mouse} from './engine/engine.js'
+import Socket from './socket.js';
+import {cb, cbr} from './shared/Shared.js'
 
-const City = function(_engine, _map) {
+const City = async function(_engine, _map) {
 	let engine = _engine;
 	let map = _map;
 	let tiles = [];
@@ -12,6 +14,22 @@ const City = function(_engine, _map) {
 
 	let selection = null;
 	let clicked_tile = null;
+	let options = {
+		city_id: 1
+	};
+	try {
+		let modified = await Socket.send('GET CITY_TILE', options);
+		var tile_modified = [];
+		modified.forEach(function(data) {
+			if (tile_modified[data.x] === undefined) {
+				tile_modified[data.x] = [];
+			}
+			tile_modified[data.x][data.y] = data;
+		});
+	}
+	catch (err) {
+		console.log(err)
+	}
 
 	for(let i=0 ; i<127 ; i++) {
 		tiles[i] = [];
@@ -23,6 +41,13 @@ const City = function(_engine, _map) {
 				tilt_x: Random.i_rand(21)-10,
 				tilt_y: Random.i_rand(21)-10,
 				// rotation: Random.f_rand(Math.PI*2)
+			}
+
+			if (tile_modified[i] !== undefined && tile_modified[i][j] !== undefined) {
+				console.log(tile_modified[i][j].b);
+				console.log(cbr[tile_modified[i][j].b]);
+				console.log(tiles[i][j].building);
+				tiles[i][j].building = cbr[tile_modified[i][j].b];
 			}
 			// if(tiles[i][j].building == 'house_top') {
 			// 	tiles[i][j].rotation = Random.i_rand(5)*Math.PI/2
@@ -101,9 +126,26 @@ const City = function(_engine, _map) {
 			selection = {
 				type: 'construct',
 				value: building,
-				onclick: (x, y, button) => {
+				onclick: async (x, y, button) => {
 					if(button == 0) {
-						tiles[x][y].building = building;
+						if (cb.hasOwnProperty(building)) {
+							try {
+								let options = {
+									city_id: 1,
+									type: cb[building],
+									x: x,
+									y: y,
+									rotation: 0,
+								};
+								await Socket.send('BUILD', options);
+								tiles[x][y].building = building;
+							}
+							catch (err) {
+								console.log(err);	
+							}
+						}
+						
+						
 					}
 				},
 			};

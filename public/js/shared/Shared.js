@@ -1,13 +1,13 @@
 // Constantes Building
 const CB = {
 	PLACE:       1,
-	ROUTE:       2,
+	road:       2,
 	TAVERNE:     3,
-	MAISON:      4,
+	house:      4,
 	AUTEL:       5,
 	TEMPLE:      6,
 	PANTHEON:    7,
-	POSTE_GARDE: 8,
+	watchtower: 8,
 	CASERNE:     9,
 	MINAGE_FER:  1,
 	MINAGE_BOIS: 1,

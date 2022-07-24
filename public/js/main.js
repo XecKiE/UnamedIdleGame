@@ -32,6 +32,7 @@ Resources.load_img({
 	'focus': 'img/sprites/focus.png',
 	'grass': 'img/sprites/grass.png',
 	'desert': 'img/sprites/desert.png',
+	'road': 'img/sprites/road.png',
 	'house': 'img/sprites/house.png',
 	'watchtower': 'img/sprites/watchtower.png',
 	'tree0': 'img/sprites/tree0.png',
@@ -65,7 +66,7 @@ window.onload = async function() {
 
 		map = engine.add_map();
 
-		city = City(engine, map);
+		city = await City(engine, map);
 		city.init();
 
 
