@@ -3,4 +3,4 @@ const Config = {
 	DB_PASSWORD: '',
 }
 
-exports.config = Config;
+export default Config;
