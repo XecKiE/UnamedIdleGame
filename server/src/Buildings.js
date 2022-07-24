@@ -18,30 +18,15 @@ exports.construct = async (options) => {
 
 		if (data !== [] && data.affectedRows == 1) {
 			console.log(`Je construit une ${options.type}`);
-			var response = {
-				status: 'success',
-				type: 'building_build',
-			};
-			console.log(response);
-			return response;
+			return {data: 'success'};
 		}
 		else {
-			var response = {
-				status: 'error',
-				type: 'db_error',
-				error: 'unable to insert data',
-			};
-			return response;
+			return {error: 'unable to insert data'};
 		}
 		
 	}
 	else {
-		var response = {
-			status: 'error',
-			type: 'options_error',
-			error: 'build parameters are not valid',
-		};
-		return response;
+		return {error: 'build parameters are not valid'};
 	}
 };
 
@@ -55,22 +40,10 @@ exports.update = async (options) => {
 			`);
 			if (data[0].affectedRows == 1) {
 				console.log(`Jupdate ${options.building_id}`);
-				var response = {
-					status: 'success',
-					type: 'building_update',
-					options: {
-						'building_id': options.building_id,
-					},
-				};
-				return response;
+				return {data: 'success'};
 			}
 			else {
-				var response = {
-					status: 'error',
-					type: 'db_error',
-					error: 'unable to update data',
-				};
-				return response;
+				return {error: 'unable to update data'};
 			}
 	}	
 };

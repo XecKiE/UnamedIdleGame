@@ -22,17 +22,14 @@ async function _checkConnection(options) {
 	{
 		if (user.connected == false) {
 			if (await users.users_list[options.user_id].connect(options)) {
-				let response = {data: 'user_connected'};
-				return response;
+				return {data: 'user_connected'};
 			}
 			else {
-				let response = {error: 'user login/password invalid'};
-				return response;
+				return {error: 'user login/password invalid'};
 			}
 		}
 		else {
-			let response = {error: 'user is already connected'};
-			return response;
+			return {error: 'user is already connected'};
 		}
 	}
 };
