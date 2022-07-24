@@ -1,6 +1,8 @@
 const Socket = function() {
 	let socket = null;
 	let message_increment = 1;
+	let timeout = 2000;
+	let timeout_id = null;
 
 	let promises = [];
 
@@ -8,11 +10,15 @@ const Socket = function() {
 	init();
 
 
-
 	function init() {
+		if (timeout_id !== null) {
+			clearTimeout(timeout_id);
+			timeout_id = null;
+		}
 		socket = new WebSocket('ws://localhost:8081');
 		socket.onopen = onopen;
 		socket.onerror = onerror;
+		socket.onclose = onclose;
 		socket.onmessage = onmessage;
 	}
 
@@ -21,7 +27,17 @@ const Socket = function() {
 		// TODO ajouter une queue dans que pas authentifié
 	}
 	async function onerror(event) {
+		console.log('error event:');
 		console.log(event);
+
+		// TODO relancer init toutes les 2-4-8-16-32-64-... secondes
+	}
+	async function onclose(event) {
+		console.log('close event:');
+		console.log(event);
+		timeout_id = setTimeout(function() { init(); }, timeout);
+		timeout *= 2;
+		console.log(timeout);
 		// TODO relancer init toutes les 2-4-8-16-32-64-... secondes
 	}
 	async function onmessage(event) {
