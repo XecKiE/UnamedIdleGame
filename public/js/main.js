@@ -73,13 +73,26 @@ async function init_login() {
 			document.querySelectorAll('.auth_login, .auth_register').forEach(dom => dom.classList.toggle('hidden'));
 		}
 	}));
+	document.querySelectorAll('.opt_logout').forEach(dom => {
+		dom.addEventListener('click', event => {
+			localStorage.removeItem('session_id');
+			document.querySelectorAll('.authentification').forEach(dom => dom.classList.remove('hidden'));
+			document.querySelectorAll('.interface').forEach(dom => dom.classList.add('hidden'));
+		});
+	});
+	// TODO on peut pas se déco reco
 
+	// TODO si on réouvre la connexion dynamiquement on sera pas authentifié faut gérer ça du coup dans socket.js de manière propre
 	let session_id = localStorage.getItem('session_id');
 	if(session_id) {
-		let data = await Socket.send('CONNECT', {session_id: session_id});
-		if(data.success) {
-			init_player(data.city_id);
-		} else {
+		try {
+			let data = await Socket.send('CONNECT', {session_id: session_id});
+			if(data.success) {
+				init_player(data.city_id);
+			} else {
+				localStorage.removeItem('session_id')
+			}// TOdo les try catch c'est caca. Se mettre d'acord avec thomas pour utiliser error que pour des erreurs type réseau pas prévues. Pas pour juste "j'ai pas pu me logger" ou "j'ai pas pu construire ça"
+		} catch {
 			localStorage.removeItem('session_id')
 		}
 	}

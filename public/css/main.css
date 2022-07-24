@@ -43,3 +43,19 @@ html, body {
 .hidden {
 	display: none !important;
 }
+
+
+.btn {
+	padding: 5px 20px;
+	background-color: var(--c-light);
+	color: var(--c-darker);
+	cursor: pointer;
+	transition: background ease .2s;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+}
+.btn:hover {
+	background-color: var(--c-medium);
+}

@@ -8,7 +8,7 @@ const Socket = function() {
 
 
 	init();
-
+	// TODO si on réouvre la connexion on sera pas authentifié faut gérer ça du coup
 
 	function init() {
 		if (timeout_id !== null) {

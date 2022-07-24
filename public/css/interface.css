@@ -3,8 +3,8 @@
 	height: 100%;
 	grid-template-columns: 150px 1fr 100px 1fr 150px;
 	grid-template-rows: 100px 50px 1fr 100px;
-	grid-template-areas: "world     resources city      notifs    .            "
-	                     "world     .         .         .         .            "
+	grid-template-areas: "world     resources city      notifs    options      "
+	                     "world     .         .         .         options      "
 	                     "menu      .         .         .         cities_armies"
 	                     "construct construct construct construct construct    ";
 }
@@ -36,6 +36,7 @@
 .int_city              { grid-area: city;              }
 .int_notifs            { grid-area: notifs;            }
 .int_cities_armies     { grid-area: cities_armies;     }
+.int_options           { grid-area: options;           }
 .int_menu              { grid-area: menu;              }
 .int_construct         { grid-area: construct;         }
 .int_btn_mobile        { grid-area: btn_mobile;        }
@@ -55,6 +56,10 @@
 	display: flex;
 	padding: 0px;
 }
+.int_options {
+	display: flex;
+	flex-direction: column;
+}
 
 @media screen and (max-width: 1280px) {
 	.interface {
@@ -65,7 +70,7 @@
 							 "main"
 							 "btn_mobile";
 	}
-	.int_world, .int_notifs, .int_cities_armies, .int_menu, .int_construct {
+	.int_world, .int_notifs, .int_cities_armies, .int_options, .int_menu, .int_construct {
 		display: none;
 		grid-area: main;
 	}

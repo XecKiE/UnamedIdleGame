@@ -1,11 +1,10 @@
 import {Random, Noise} from './random.js';
 import {CBR} from './Shared.js';
 
-const CityData = function(seed, _tiles_modified) {
+const CityData = function(city_id, _tiles_modified) {
 	let tiles_modified = _tiles_modified;
 
-	let noise = new Noise(seed);
-	// let rand = new Random(seed);
+	let noise = new Noise(city_id);
 
 
 	function get_tile(i, j) {

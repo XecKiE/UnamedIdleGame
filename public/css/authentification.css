@@ -58,12 +58,4 @@
 }
 .authentification button {
 	align-self: center;
-	padding: 5px 20px;
-	background-color: var(--c-light);
-	color: var(--c-darker);
-	cursor: pointer;
-	transition: background ease .2s;
-}
-.authentification button:hover {
-	background-color: var(--c-medium);
 }
