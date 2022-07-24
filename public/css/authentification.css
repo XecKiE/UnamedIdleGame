@@ -1,0 +1,69 @@
+.authentification {
+	height: 100%;
+	background-color: var(--c-background);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: 25vh;
+}
+
+
+
+.auth_box {
+	width: 500px;
+	background: var(--c-background-popup);
+}
+
+.auth_type {
+	display: flex;
+	justify-content: space-around;
+}
+.auth_type > * {
+	padding: 20px;
+	flex: 1;
+	text-align: center;
+	transition: background ease .2s;
+}
+.auth_type > *:not(.selected) {
+	background: var(--c-background-popup-dark);
+	cursor: pointer;
+}
+.auth_type > *:not(.selected):hover {
+	filter: brightness(1.25);
+}
+
+.authentification form {
+	display: flex;
+	flex-direction: column;
+	padding: 40px;
+}
+.authentification label {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-bottom: 20px;
+}
+.authentification label > *:first-child {
+	text-align: right;
+	padding-right: 10px;
+	flex: 1;
+}
+.authentification label > *:last-child {
+	flex: 2;
+}
+.authentification input{
+	background-color: var(--c-light);
+	color: var(--c-darker);
+	padding: 5px 20px;
+}
+.authentification button {
+	align-self: center;
+	padding: 5px 20px;
+	background-color: var(--c-light);
+	color: var(--c-darker);
+	cursor: pointer;
+	transition: background ease .2s;
+}
+.authentification button:hover {
+	background-color: var(--c-medium);
+}

@@ -40,7 +40,10 @@ export const checkOptions = (options, needed) => {
 	})
 	return true;
 }
-export const cb = CB;
-export const cbr = CBR;
+
+export {
+	CB,
+	CBR
+}
 
 

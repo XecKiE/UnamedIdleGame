@@ -1,8 +1,6 @@
-
 import conf from './Config.js';
 import mariadb from 'mariadb';
-// console.log(conf.config.DB_USER);
-// console.log(conf.config.DB_PASSWORD);
+import * as D from './D.js';
 
 
 const pool = mariadb.createPool({
@@ -15,12 +13,13 @@ const pool = mariadb.createPool({
 	acquireTimeout: 1500,
 });
 
+
 pool.getConnection().then(conn => {
-		console.log("connected ! connection id is " + conn.threadId);
+		D.init("DB connected - id is " + conn.threadId);
 		conn.release(); //release to pool
 	})
 	.catch(err => {
-		console.log("not connected due to error: " + err);
+		D.init_error("not connected due to error: " + err);
 	});
 
 export const query = async (sql) => {
@@ -36,9 +35,13 @@ export const query = async (sql) => {
 	}
 	catch (err) {
 		conn.release();
-		console.log(err);
-		console.log('on returne null');
+		D.init_error('DB query failed');
+		D.init_error(err);
 		return [];
 	}
 
 }
+
+export const str = (str) => pool.escape(str);
+export const int = (int) => {let a = parseInt(int); return isNaN(a) ? 0 : a};
+export const float = (float) => {let a = parseFloat(float); return isNaN(a) ? 0 : a};

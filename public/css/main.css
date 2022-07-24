@@ -3,7 +3,7 @@ html, body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
-	color: azure;
+	color: var(--c-light);
 	font-family: Lato, Tahoma, Geneva, sans-serif;
 }
 * {
@@ -14,145 +14,17 @@ html, body {
 }
 
 
-.interface {
-	display: grid;
-	height: 100%;
-	grid-template-columns: 150px 1fr 100px 1fr 150px;
-	grid-template-rows: 100px 50px 1fr 100px;
-	grid-template-areas: "world     resources city      notifs    .            "
-	                     "world     .         .         .         .            "
-	                     "menu      .         .         .         cities_armies"
-	                     "construct construct construct construct construct    ";
+:root {
+	--c-background: #3F4E4F;
+	--c-background-popup-dark: #1e2425;
+	--c-background-popup: #2C3639;
+	--c-light: #DCD7C9;
+	--c-medium: #A27B5C;
+	--c-dark: #2C3639;
+	--c-darker: #3F4E4F;
+	--shadow: box-shadow: 0 0 10px;
 }
 
-
-.int_menu, .int_cities_armies {
-	align-self: flex-start;
-}
-
-.int_construct {
-	justify-self: center;
-}
-
-.int_btn_mobile {
-	display: none;
-}
-
-/*Debug*/
-.interface > * {
-	border: 1px solid azure;
-	padding: 20px;
-	background-color: #222;
-	z-index: 1;
-}
-
-
-.int_world             { grid-area: world;             }
-.int_resources         { grid-area: resources;         }
-.int_city              { grid-area: city;              }
-.int_notifs            { grid-area: notifs;            }
-.int_cities_armies     { grid-area: cities_armies;     }
-.int_menu              { grid-area: menu;              }
-.int_construct         { grid-area: construct;         }
-.int_btn_mobile        { grid-area: btn_mobile;        }
-
-
-
-
-.world {
-	z-index: 0;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-}
-.int_construct {
-	display: flex;
-	padding: 0px;
-}
-
-@media screen and (max-width: 1280px) {
-	.interface {
-		grid-template-columns: 1fr;
-		grid-template-rows: 100px 100px 1fr 100px;
-		grid-template-areas: "city"
-		                     "resources"
-							 "main"
-							 "btn_mobile";
-	}
-	.int_world, .int_notifs, .int_cities_armies, .int_menu, .int_construct {
-		display: none;
-		grid-area: main;
-	}
-	.int_menu, .int_cities_armies {
-		align-self: auto;
-	}
-	.int_btn_mobile {
-		display: flex;
-		justify-content: space-around;
-	}
-	.int_btn_mobile > * {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-	}
-	.int_btn_mobile img {
-		/* max-width: 100%;
-		max-height: 100%; */
-		height: 50px;
-		cursor: pointer;
-	}
-	.world {
-		grid-area: main;
-		position: static;
-	}
-}
-
-
-
-
-
-
-
-.building {
-	font-size: .8em;
-	/* overflow: hidden; */
-	display: flex;
-	flex-direction: column-reverse;
-	align-items: center;
-	padding: 5px;
-	cursor: pointer;
-	width: 100px;
-}
-.building:hover {
-	background-color: #333;
-}
-.building.selected {
-	background-color: #444;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.world {
-	display: flex;
-	margin: 0;
-	padding: 0;
-	border: none;
-}
-canvas {
-	width: 100%;
-	height: 100%;
+.hidden {
+	display: none !important;
 }

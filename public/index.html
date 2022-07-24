@@ -5,11 +5,46 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" >
 		<meta charset="utf-8">
 		<link rel="icon" href="img/favicon.png">
+		<link rel="stylesheet" href="css/reset.css" />
+		<link rel="stylesheet" href="css/authentification.css" />
+		<link rel="stylesheet" href="css/interface.css" />
 		<link rel="stylesheet" href="css/main.css" />
 		<script type="module" src="js/main.js"></script>
 	</head>
 	<body>
-		<div class="interface">
+		<div class="authentification">
+			<div class="auth_box">
+				<div class="auth_type">
+					<div class="auth_login_btn selected">Login</div>
+					<div class="auth_register_btn">Register</div>
+				</div>
+				<form class="auth_login">
+					<input type="hidden" name="type" value="login" />
+					<label>
+						<div>Nom d'utilisateur</div>
+						<input type="text" name="login" />
+					</label>
+					<label>
+						<div>Mot de passe</div>
+						<input type="password" name="passwd" />
+					</label>
+					<button type="submit">Se connecter</button>
+				</form>
+				<form class="auth_register hidden">
+					<input type="hidden" name="type" value="register" />
+					<label>
+						<div>Nom d'utilisateur</div>
+						<input type="text" name="login" />
+					</label>
+					<label>
+						<div>Mot de passe</div>
+						<input type="password" name="passwd" />
+					</label>
+					<button type="submit">S'inscrire</button>
+				</form>
+			</div>
+		</div>
+		<div class="interface hidden">
 			<div class="int_world">world</div>
 			<div class="int_resources">resources</div>
 			<div class="int_city">city</div>

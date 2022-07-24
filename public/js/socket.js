@@ -15,7 +15,7 @@ const Socket = function() {
 			clearTimeout(timeout_id);
 			timeout_id = null;
 		}
-		socket = new WebSocket('ws://localhost:8081');
+		socket = new WebSocket(window.location.protocol.replace('http', 'ws')+'//'+window.location.host);
 		socket.onopen = onopen;
 		socket.onerror = onerror;
 		socket.onclose = onclose;
@@ -23,7 +23,7 @@ const Socket = function() {
 	}
 
 	async function onopen(event) {
-		let data = await send('CONNECT', {user:'test', password:'test'});
+		// let data = await send('CONNECT', {user:'test', password:'test'});
 		// TODO ajouter une queue dans que pas authentifié
 	}
 	async function onerror(event) {

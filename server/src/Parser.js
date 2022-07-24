@@ -1,8 +1,10 @@
 import * as build from './Buildings.js';
 import * as users from './User.js';
 import * as get from './Get.js';
+import * as db from './DB.js';
 
 const func_map = {
+	'REGISTER': _register,
 	'CONNECT': _checkConnection,
 	'BUILD': build.construct,
 	'UPDATE': build.update,
@@ -15,6 +17,10 @@ const func_map = {
 
 };
 
+async function _register(options) {
+	users.register(options)
+};
+
 async function _checkConnection(options) {
 	console.log(options);
 	let user = users.users_list[options.user_id];
@@ -22,14 +28,20 @@ async function _checkConnection(options) {
 	{
 		if (user.connected == false) {
 			if (await users.users_list[options.user_id].connect(options)) {
-				return {data: 'user_connected'};
+				let row = await db.query(`
+					SELECT city_id
+					FROM city
+					JOIN users USING(user_id)
+					WHERE username = ${db.str(options.user)} LIMIT 1
+				`);
+				return {data: {success: true, data: 'user_connected', city_id: row[0].city_id}};
 			}
 			else {
-				return {error: 'user login/password invalid'};
+				return {success: false, error: 'user login/password invalid'};
 			}
 		}
 		else {
-			return {error: 'user is already connected'};
+			return {success: false, error: 'user is already connected'};
 		}
 	}
 };
@@ -41,7 +53,7 @@ export default async (socket_data, user_uuid) => {
 		idr: data.id,
 		data: null
 	};
-	if (user.connected == false && data.action != 'CONNECT') {
+	if (user.connected == false && data.action != 'CONNECT' && data.action != 'REGISTER') {
 		response.error = 'user is not connected';
 		return JSON.stringify(response);
 	}
@@ -51,7 +63,9 @@ export default async (socket_data, user_uuid) => {
 	console.log(data.action.split(' '));
 	try {
 		data.options.user_id = user_uuid;
+		console.log(data)
 		var ret = await data.action.split(' ').reduce((a, b) => a[b], func_map)(data.options);
+		console.log(ret);
 		if (ret.error) {
 			response.error = ret; 
 		}

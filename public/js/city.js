@@ -1,11 +1,12 @@
 import {Random, Mouse} from './engine/engine.js'
 import Socket from './socket.js';
-import {cb, cbr} from './shared/Shared.js'
+import {CB, CBR} from './shared/Shared.js'
 import CityData from './shared/city_data.js';
 
-const City = async function(_engine, _map) {
+const City = async function(_engine, _map, _city_id) {
 	let engine = _engine;
 	let map = _map;
+	let city_id = _city_id;
 	let tiles = [];
 
 	let available_buildings = [
@@ -16,24 +17,25 @@ const City = async function(_engine, _map) {
 	let selection = null;
 	let clicked_tile = null;
 	let options = {
-		city_id: 1
+		city_id: city_id
 	};
 	try {
 		let modified = await Socket.send('GET CITY_TILE', options);
-		var tile_modified = [];
+		var tiles_modified = [];
 		modified.forEach(function(data) {
-			if (tile_modified[data.x] === undefined) {
-				tile_modified[data.x] = [];
+			if (tiles_modified[data.x] === undefined) {
+				tiles_modified[data.x] = [];
 			}
-			tile_modified[data.x][data.y] = data;
+			tiles_modified[data.x][data.y] = data;
 		});
+		console.log(tiles_modified);
 	}
 	catch (err) {
 		console.log(err)
 	}
 
 
-	let city_data = CityData(50);
+	let city_data = CityData(50, tiles_modified);
 	tiles = city_data.get_tiles();
 
 
@@ -110,11 +112,11 @@ const City = async function(_engine, _map) {
 				value: building,
 				onclick: async (x, y, button) => {
 					if(button == 0) {
-						if (cb.hasOwnProperty(building)) {
+						if (CB.hasOwnProperty(building)) {
 							try {
 								let options = {
 									city_id: 1,
-									type: cb[building],
+									type: CB[building],
 									x: x,
 									y: y,
 									rotation: 0,

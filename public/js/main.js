@@ -19,8 +19,6 @@
 import {Engine, Resources, Map, Mouse} from './engine/engine.js';
 import City from './city.js';
 import Socket from './socket.js';
-import {Random, Noise} from './shared/random.js';
-import CityData from './shared/city_data.js';
 
 
 var engine = null;
@@ -34,6 +32,8 @@ Resources.load_img({
 	'focus': 'img/sprites/focus.png',
 	'grass': 'img/sprites/grass.png',
 	'desert': 'img/sprites/desert.png',
+	'water': 'img/sprites/water.png',
+	'mud': 'img/sprites/mud.png',
 	'road': 'img/sprites/road.png',
 	'house': 'img/sprites/house.png',
 	'watchtower': 'img/sprites/watchtower.png',
@@ -44,44 +44,48 @@ Resources.load_img({
 })
 Mouse.disable_context_menu();
 window.onload = async function() {
+	init_login();
+	// init_player();
+}
+
+
+async function init_player(city_id) {
+	document.querySelectorAll('.authentification').forEach(dom => dom.classList.add('hidden'));
+	document.querySelectorAll('.interface').forEach(dom => dom.classList.remove('hidden'));
 	document.querySelectorAll('canvas').forEach(async (can) => {
-		// let truc = await Socket.send('GET CITY_TILE', {city_id: 1});
-		// console.log(truc);
-		// truc = await Socket.send('CHOSE CITY_TILE', {city_id: 1});
-		// console.log(truc);
-
-		var r = new Random(20);
-		let res = [];
-		for (var i = 0; i < 10; i++)
-			res.push(r.nextRange(0, 2))
-		console.log(res.join(' '))
-
-		// var digits = ['0ds', '1', 'ss2', '3', '4', '5cx', '6', '7ss', '8', '9'];
-		// res = [];
-		// for (var i = 0; i < 10; i++)
-		// 	res.push(r.choice(digits));
-		// console.log(res.join(' '))
-
-		// let noise = new Noise(50);
-		// console.log(noise.noise2D(5, 5))
-
-		city_data = CityData();
-
-
 
 		engine = Engine(can);
-
 		map = engine.add_map();
-
-		city = await City(engine, map);
+		city = await City(engine, map, city_id);
 		city.init();
 
 
 		engine.render(() => {
 			city.render();
 		});
-
-
-		// city.deinit(map);
 	})
+}
+
+function init_login() {
+	document.querySelectorAll('.auth_type > *').forEach(dom => dom.addEventListener('click', event => {
+		if(!dom.classList.contains('selected')) {
+			document.querySelectorAll('.auth_type > *').forEach(dom => dom.classList.toggle('selected'));
+			document.querySelectorAll('.auth_login, .auth_register').forEach(dom => dom.classList.toggle('hidden'));
+		}
+	}));
+
+	document.querySelectorAll('.authentification form').forEach(dom => {
+		dom.addEventListener('submit', async event => {
+			event.preventDefault();
+
+			if(dom.type.value == 'register') {
+				let data = await Socket.send('REGISTER', {user: dom.login.value, password: dom.passwd.value});
+			}
+			let data = await Socket.send('CONNECT', {user: dom.login.value, password: dom.passwd.value});
+				console.log(data)
+			if(data.success) {
+				init_player(data.city_id);
+			}
+		});
+	});
 }
