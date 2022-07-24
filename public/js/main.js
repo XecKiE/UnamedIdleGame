@@ -19,12 +19,14 @@
 import {Engine, Resources, Map, Mouse} from './engine/engine.js';
 import City from './city.js';
 import Socket from './socket.js';
-import Random from './shared/random.js';
+import {Random, Noise} from './shared/random.js';
+import CityData from './shared/city_data.js';
 
 
 var engine = null;
 var map = null;
 var city = null;
+var city_data = null;
 Resources.load_img({
 	'wolf': 'img/favicon.png',
 	'cow': 'img/placeholder.png',
@@ -43,22 +45,27 @@ Resources.load_img({
 Mouse.disable_context_menu();
 window.onload = async function() {
 	document.querySelectorAll('canvas').forEach(async (can) => {
-		let truc = await Socket.send('GET CITY_TILE', {city_id: 1});
-		console.log(truc);
+		// let truc = await Socket.send('GET CITY_TILE', {city_id: 1});
+		// console.log(truc);
 		// truc = await Socket.send('CHOSE CITY_TILE', {city_id: 1});
 		// console.log(truc);
 
 		var r = new Random(20);
 		let res = [];
 		for (var i = 0; i < 10; i++)
-			res.push(r.nextRange(10, 50))
+			res.push(r.nextRange(0, 2))
 		console.log(res.join(' '))
 
-		var digits = ['0ds', '1', 'ss2', '3', '4', '5cx', '6', '7ss', '8', '9'];
-		res = [];
-		for (var i = 0; i < 10; i++)
-			res.push(r.choice(digits));
-		console.log(res.join(' '))
+		// var digits = ['0ds', '1', 'ss2', '3', '4', '5cx', '6', '7ss', '8', '9'];
+		// res = [];
+		// for (var i = 0; i < 10; i++)
+		// 	res.push(r.choice(digits));
+		// console.log(res.join(' '))
+
+		// let noise = new Noise(50);
+		// console.log(noise.noise2D(5, 5))
+
+		city_data = CityData();
 
 
 

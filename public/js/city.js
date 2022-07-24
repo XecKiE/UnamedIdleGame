@@ -1,6 +1,7 @@
 import {Random, Mouse} from './engine/engine.js'
 import Socket from './socket.js';
 import {cb, cbr} from './shared/Shared.js'
+import CityData from './shared/city_data.js';
 
 const City = async function(_engine, _map) {
 	let engine = _engine;
@@ -31,29 +32,10 @@ const City = async function(_engine, _map) {
 		console.log(err)
 	}
 
-	for(let i=0 ; i<127 ; i++) {
-		tiles[i] = [];
-		for(let j=0 ; j<127 ; j++) {
-			tiles[i][j] = {
-				land: i < 10 ? 'desert' : 'grass',
-				building: Random.i_rand(5) == 1 ? 'tree'+Random.i_rand(4) : null,
-				// building: Random.i_rand(2) == 1 ? 'house_top' : Random.i_rand(2) == 1 ? 'tree_top'+Random.i_rand(4) : null,
-				tilt_x: Random.i_rand(21)-10,
-				tilt_y: Random.i_rand(21)-10,
-				// rotation: Random.f_rand(Math.PI*2)
-			}
 
-			if (tile_modified[i] !== undefined && tile_modified[i][j] !== undefined) {
-				console.log(tile_modified[i][j].b);
-				console.log(cbr[tile_modified[i][j].b]);
-				console.log(tiles[i][j].building);
-				tiles[i][j].building = cbr[tile_modified[i][j].b];
-			}
-			// if(tiles[i][j].building == 'house_top') {
-			// 	tiles[i][j].rotation = Random.i_rand(5)*Math.PI/2
-			// }
-		}
-	}
+	let city_data = CityData(50);
+	tiles = city_data.get_tiles();
+
 
 	function render() {
 		// console.log(selection);

@@ -45,8 +45,10 @@ const Socket = function() {
 		if(promises[data.idr]) {
 			if(data.data) {
 				promises[data.idr].resolve(data.data);
+				delete promises[data.idr];
 			} else if(data.error) {
 				promises[data.idr].reject(data.error);
+				delete promises[data.idr];
 			} else {
 				console.log('reçu un message chelou', data)
 			}
