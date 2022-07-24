@@ -15,7 +15,11 @@ const Socket = function() {
 			clearTimeout(timeout_id);
 			timeout_id = null;
 		}
-		socket = new WebSocket(window.location.protocol.replace('http', 'ws')+'//'+window.location.host);
+		let ws_url = window.location.protocol.replace('http', 'ws')+'//'+window.location.hostname;
+		if(window.location.hostname == 'localhost' || window.location.hostname == '127.0.0.1') {
+			ws_url += ':8080';
+		}
+		socket = new WebSocket(ws_url);
 		socket.onopen = onopen;
 		socket.onerror = onerror;
 		socket.onclose = onclose;
