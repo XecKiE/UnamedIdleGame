@@ -36,7 +36,7 @@ const City = async function(_engine, _map, _city_id) {
 	}
 
 
-	let city_data = CityData(50, tiles_modified);
+	let city_data = CityData(city_id, tiles_modified);
 	tiles = city_data.get_tiles();
 
 
