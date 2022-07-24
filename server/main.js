@@ -24,19 +24,6 @@ console.log('HTTP server has been started on :3000');
 
 
 //Server WEBSOCKET
-import Random from '../public/js/shared/random.js'
-		var r = new Random(20);
-		let res = [];
-		for (var i = 0; i < 10; i++)
-			res.push(r.nextRange(10, 50))
-		console.log(res.join(' '))
-
-		var digits = ['0ds', '1', 'ss2', '3', '4', '5cx', '6', '7ss', '8', '9'];
-		res = [];
-		for (var i = 0; i < 10; i++)
-			res.push(r.choice(digits));
-		console.log(res.join(' '))
-
 import * as db from './src/DB.js';
 import parser from './src/Parser.js';
 import * as users from './src/User.js';
