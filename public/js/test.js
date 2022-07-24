@@ -22,8 +22,8 @@ function build_taverne() {
 		options: {
 			city_id:1,
 			type:2,
-			x:5,
-			y:7,
+			x:10,
+			y:10,
 			rotation:0,
 		}
 	};*/
