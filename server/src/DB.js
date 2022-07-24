@@ -35,6 +35,7 @@ export const query = async (sql) => {
 		}
 	}
 	catch (err) {
+		conn.release();
 		console.log(err);
 		console.log('on returne null');
 		return [];
