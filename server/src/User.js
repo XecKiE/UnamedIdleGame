@@ -1,10 +1,10 @@
-var db = require(__dirname+'/DB.js');
-const { createHash } = require('crypto');
+import * as db from './DB.js';
+import { createHash } from 'crypto';
 
-var users_list = {};
+var users_listpardonmaisfautunnomdiffjecrois = {};
 var uuid = 10;
 
-exports.User = class User {
+export class User {
 	ws = null;
 	
 	constructor(ws) {
@@ -15,7 +15,7 @@ exports.User = class User {
 		this.connected = false;
 		this.uuid = uuid;
 		console.log(this.uuid)
-		users_list[uuid] = this;
+		users_listpardonmaisfautunnomdiffjecrois[uuid] = this;
 		return uuid;
 	}
 
@@ -35,4 +35,4 @@ exports.User = class User {
 	}
 }
 
-exports.users_list = users_list;
+export const users_list = users_listpardonmaisfautunnomdiffjecrois;

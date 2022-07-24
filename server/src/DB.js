@@ -1,13 +1,15 @@
 
-const conf = require(__dirname+'/Config.js');
-console.log(conf.config.DB_USER);
-console.log(conf.config.DB_PASSWORD);
-const mariadb = require('mariadb');
+import conf from './Config.js';
+import mariadb from 'mariadb';
+// console.log(conf.config.DB_USER);
+// console.log(conf.config.DB_PASSWORD);
+
+
 const pool = mariadb.createPool({
 	host: 'xeck.fr', 
 	port: 7013,
-	user: conf.config.DB_USER, 
-	password: conf.config.DB_PASSWORD,
+	user: conf.DB_USER, 
+	password: conf.DB_PASSWORD,
 	database: 'untitled',
 	connectionLimit: 5,
 	acquireTimeout: 1500,
@@ -21,7 +23,7 @@ pool.getConnection().then(conn => {
 		console.log("not connected due to error: " + err);
 	});
 
-exports.query = async (sql) => {
+export const query = async (sql) => {
 	let conn;
 	try {
 		conn = await pool.getConnection();

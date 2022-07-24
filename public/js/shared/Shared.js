@@ -32,7 +32,7 @@ for(let i in CT) {
 }
 
 
-exports.checkOptions = (options, needed) => {
+export const checkOptions = (options, needed) => {
 	needed.forEach(function(a) {
 		if(!options.hasOwnProperty(a)) {
 				return false;
@@ -40,7 +40,7 @@ exports.checkOptions = (options, needed) => {
 	})
 	return true;
 }
-exports.cb = CB;
-exports.cbr = CBR;
+export const cb = CB;
+export const cbr = CBR;
 
 

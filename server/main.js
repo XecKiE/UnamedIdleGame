@@ -6,10 +6,10 @@
 
 //Server HTTP
 
-var finalhandler = require('finalhandler')
-var http = require('http')
-var serveStatic = require('serve-static')
-
+import finalhandler from 'finalhandler'
+import http from 'http'
+import serveStatic from 'serve-static'
+import {WebSocketServer } from 'ws';
 
 console.log('starting  HTTP server');
 var serve = serveStatic('./public/', { index: ['index.html', 'index.htm'] })
@@ -24,15 +24,26 @@ console.log('HTTP server has been started on :3000');
 
 
 //Server WEBSOCKET
+import Random from '../public/js/shared/random.js'
+		var r = new Random(20);
+		let res = [];
+		for (var i = 0; i < 10; i++)
+			res.push(r.nextRange(10, 50))
+		console.log(res.join(' '))
 
+		var digits = ['0ds', '1', 'ss2', '3', '4', '5cx', '6', '7ss', '8', '9'];
+		res = [];
+		for (var i = 0; i < 10; i++)
+			res.push(r.choice(digits));
+		console.log(res.join(' '))
 
-var ws = require('ws');
-var db = require(__dirname+'/src/DB.js');
-var parser = require(__dirname+'/src/Parser.js');
-var users = require(__dirname+'/src/User.js');
+import * as db from './src/DB.js';
+import parser from './src/Parser.js';
+import * as users from './src/User.js';
+
 
 console.log('starting  WEBSOCKET server');
-const wss = new ws.WebSocketServer({ port: 8081, clientTracking: true });
+const wss = new WebSocketServer({ port: 8081, clientTracking: true });
 
 wss.on('connection', function connection(ws, req) {
 	var user = new users.User(ws);
@@ -40,7 +51,7 @@ wss.on('connection', function connection(ws, req) {
 	ws.on('message', async function message(data) {
 
 		console.log(`Received message ${data} from ${user.uuid}`);
-		let response = await parser.parse(data, user.uuid);
+		let response = await parser(data, user.uuid);
 		console.log(`reponse : ${response}`)
 		ws.send(response);
 	});

@@ -19,6 +19,7 @@
 import {Engine, Resources, Map, Mouse} from './engine/engine.js';
 import City from './city.js';
 import Socket from './socket.js';
+import Random from './shared/random.js';
 
 
 var engine = null;
@@ -43,8 +44,22 @@ window.onload = async function() {
 	document.querySelectorAll('canvas').forEach(async (can) => {
 		let truc = await Socket.send('GET CITY_TILE', {city_id: 1});
 		console.log(truc);
-		truc = await Socket.send('CHOSE CITY_TILE', {city_id: 1});
-		console.log(truc);
+		// truc = await Socket.send('CHOSE CITY_TILE', {city_id: 1});
+		// console.log(truc);
+
+		var r = new Random(20);
+		let res = [];
+		for (var i = 0; i < 10; i++)
+			res.push(r.nextRange(10, 50))
+		console.log(res.join(' '))
+
+		var digits = ['0ds', '1', 'ss2', '3', '4', '5cx', '6', '7ss', '8', '9'];
+		res = [];
+		for (var i = 0; i < 10; i++)
+			res.push(r.choice(digits));
+		console.log(res.join(' '))
+
+
 
 		engine = Engine(can);
 

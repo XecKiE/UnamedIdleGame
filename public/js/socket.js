@@ -27,7 +27,13 @@ const Socket = function() {
 	async function onmessage(event) {
 		let data = JSON.parse(event.data);
 		if(promises[data.idr]) {
-			promises[data.idr].resolve(data);
+			if(data.data) {
+				promises[data.idr].resolve(data.data);
+			} else if(data.error) {
+				promises[data.idr].reject(data.error);
+			} else {
+				console.log('reçu un message chelou', data)
+			}
 		} else {
 			console.log('reçu un message chelou', data)
 		}

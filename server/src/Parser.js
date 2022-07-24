@@ -1,6 +1,6 @@
-const build = require(__dirname+'/Buildings.js');
-const users = require(__dirname+'/User.js');
-const get = require(__dirname+'/Get.js');
+import * as build from './Buildings.js';
+import * as users from './User.js';
+import * as get from './Get.js';
 
 const func_map = {
 	'CONNECT': _checkConnection,
@@ -34,7 +34,7 @@ async function _checkConnection(options) {
 	}
 };
 
-exports.parse = async (socket_data, user_uuid) => {
+export default async (socket_data, user_uuid) => {
 	var data = JSON.parse(socket_data);
 	var user = users.users_list[user_uuid];
 	let response = {

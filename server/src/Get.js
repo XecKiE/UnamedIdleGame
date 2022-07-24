@@ -1,8 +1,8 @@
-var db = require(__dirname+'/DB.js');
-var shared = require(process.cwd()+'/public/js/shared/Shared.js');
+import * as db from './DB.js';
+import * as shared from './../../public/js/shared/Shared.js';
 
 
-exports.exportModifiedCityTile = async (options) => {
+export const exportModifiedCityTile = async (options) => {
 	if(shared.checkOptions(options, ['city_id'])) {
 		let rows = await db.query(`
 			SELECT tile_x, tile_y, building_type_id, building_level, building_rotation, terrain_type_id,health
@@ -30,7 +30,7 @@ exports.exportModifiedCityTile = async (options) => {
 	}
 }
 
-exports.exportPlayerCity = async (options) => {
+export const exportPlayerCity = async (options) => {
 
 	if(shared.checkOptions(options, ['city_id'])) {
 		let rows = await db.query(`
@@ -54,6 +54,6 @@ exports.exportPlayerCity = async (options) => {
 	}
 }
 
-exports.exportCity = async (options) => {
+export const exportCity = async (options) => {
 
 }

@@ -1,9 +1,9 @@
-var db = require(__dirname+'/DB.js');
-var shared = require(process.cwd()+'/public/js/shared/Shared.js');
+import * as db from './DB.js';
+import * as shared from './../../public/js/shared/Shared.js';
 
 
 //fonction facile sans gestion de l'economie
-exports.construct = async (options) => {
+export const construct = async (options) => {
 
 	console.log(shared.checkOptions(options, ['city_id', 'type', 'x', 'y', 'rotation']));
 	if (shared.checkOptions(options, ['city_id', 'type', 'x', 'y', 'rotation']) && shared.cbr[options.type]) {
@@ -30,7 +30,7 @@ exports.construct = async (options) => {
 	}
 };
 
-exports.update = async (options) => {
+export const update = async (options) => {
 	
 	if (shared.checkOptions(options, ['building_id'])) {
 			let data = await db.query(`
@@ -48,5 +48,5 @@ exports.update = async (options) => {
 	}	
 };
 
-exports.destruct = async (options) => {
+export const destruct = async (options) => {
 }
