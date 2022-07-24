@@ -31,7 +31,7 @@ import * as users from './src/User.js';
 
 
 D.init('starting  WEBSOCKET server');
-const wss = new WebSocketServer({ port: 8080, clientTracking: true });
+const wss = new WebSocketServer({ port: 8081, clientTracking: true });
 
 wss.on('connection', function connection(ws, req) {
 	var user = new users.User(ws);
@@ -50,6 +50,6 @@ wss.on('connection', function connection(ws, req) {
 	});
 });
 
-D.init('WEBSOCKET server has been started on :8080');
+D.init('WEBSOCKET server has been started on :8081');
 
 

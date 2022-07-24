@@ -17,7 +17,7 @@ const Socket = function() {
 		}
 		let ws_url = window.location.protocol.replace('http', 'ws')+'//'+window.location.hostname;
 		if(window.location.hostname == 'localhost' || window.location.hostname == '127.0.0.1') {
-			ws_url += ':8080';
+			ws_url += ':8081';
 		}
 		socket = new WebSocket(ws_url);
 		socket.onopen = onopen;
