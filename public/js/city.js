@@ -21,6 +21,7 @@ const City = async function(_engine, _map, _city_id) {
 	};
 	try {
 		let modified = await Socket.send('GET CITY_TILE', options);
+		console.log(modified, city_id)
 		var tiles_modified = [];
 		modified.forEach(function(data) {
 			if (tiles_modified[data.x] === undefined) {
@@ -115,7 +116,7 @@ const City = async function(_engine, _map, _city_id) {
 						if (CB.hasOwnProperty(building)) {
 							try {
 								let options = {
-									city_id: 1,
+									city_id: city_id,
 									type: CB[building],
 									x: x,
 									y: y,

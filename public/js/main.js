@@ -66,7 +66,7 @@ async function init_player(city_id) {
 	})
 }
 
-function init_login() {
+async function init_login() {
 	document.querySelectorAll('.auth_type > *').forEach(dom => dom.addEventListener('click', event => {
 		if(!dom.classList.contains('selected')) {
 			document.querySelectorAll('.auth_type > *').forEach(dom => dom.classList.toggle('selected'));
@@ -74,6 +74,15 @@ function init_login() {
 		}
 	}));
 
+	let session_id = localStorage.getItem('session_id');
+	if(session_id) {
+		let data = await Socket.send('CONNECT', {session_id: session_id});
+		if(data.success) {
+			init_player(data.city_id);
+		} else {
+			localStorage.removeItem('session_id')
+		}
+	}
 	document.querySelectorAll('.authentification form').forEach(dom => {
 		dom.addEventListener('submit', async event => {
 			event.preventDefault();
@@ -82,10 +91,11 @@ function init_login() {
 				let data = await Socket.send('REGISTER', {user: dom.login.value, password: dom.passwd.value});
 			}
 			let data = await Socket.send('CONNECT', {user: dom.login.value, password: dom.passwd.value});
-				console.log(data)
 			if(data.success) {
+				localStorage.setItem('session_id', data.session_id)
 				init_player(data.city_id);
 			}
 		});
 	});
+	document.querySelectorAll('.loading').forEach((dom) => dom.classList.add('fade'));
 }

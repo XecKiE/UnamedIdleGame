@@ -32,7 +32,7 @@ async function _checkConnection(options) {
 					SELECT city_id
 					FROM city
 					JOIN users USING(user_id)
-					WHERE username = ${db.str(options.user)} LIMIT 1
+					WHERE user_id = ${db.int(users.users_list[options.user_id].user_id)} LIMIT 1
 				`);
 				return {data: {success: true, data: 'user_connected', city_id: row[0].city_id, session_id: users.users_list[options.user_id].session_id}};
 			}
