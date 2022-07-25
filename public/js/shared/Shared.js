@@ -35,6 +35,7 @@ const economyProduction = {
 		2: 4,
 		3: 7,
 		4: 10,
+		5: 12,
 	},
 	wood_camp: {
 		1: 10,
@@ -44,7 +45,6 @@ const economyProduction = {
 		5: 25,
 	},
 }
-
 
 // Constantes Terrain
 const CT = {
@@ -72,6 +72,7 @@ export {
 	CB,
 	CBR,
 	economyProduction,
+	production
 }
 
 
