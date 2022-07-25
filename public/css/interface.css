@@ -55,6 +55,8 @@
 .int_construct {
 	display: flex;
 	padding: 0px;
+	max-width: 100%;
+	overflow-x: auto;
 }
 .int_options {
 	display: flex;
@@ -88,6 +90,8 @@
 	.int_btn_mobile {
 		display: flex;
 		justify-content: space-around;
+		max-width: 100%;
+		overflow-x: auto;
 	}
 	.int_btn_mobile > * {
 		display: flex;
