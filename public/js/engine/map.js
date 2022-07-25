@@ -140,7 +140,9 @@ const Map = function(_dom) {
 				dist = null;
 			}
 
-			_move(-delta.x/z, -delta.y/z);
+			if(!frozen || new_touches.length !== 1) {
+				_move(-delta.x/z, -delta.y/z);
+			}
 		}
 		touches = new_touches;
 	};

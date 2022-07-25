@@ -68,11 +68,19 @@
 		grid-template-areas: "city"
 		                     "resources"
 							 "main"
+							 "bar"
 							 "btn_mobile";
 	}
-	.int_world, .int_notifs, .int_cities_armies, .int_options, .int_menu, .int_construct {
+	.int_world, .int_notifs, .int_cities_armies, .int_options, .int_menu {
 		display: none;
-		grid-area: main;
+		grid-area: main bar;
+	}
+	.int_construct {
+		display: none;
+		grid-area: bar;
+	}
+	.int_construct.shown {
+		display: flex;
 	}
 	.int_menu, .int_cities_armies {
 		align-self: auto;

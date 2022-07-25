@@ -38,6 +38,8 @@ const Mouse = function() {
 		middle:   () => middle,
 		right:    () => right,
 
+		has_mouse: () => matchMedia('(pointer:fine)').matches,
+
 		disable_context_menu: disable_context_menu,
 	}
 }();

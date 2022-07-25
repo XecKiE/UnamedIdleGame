@@ -82,11 +82,11 @@ const City = async function(_engine, _map, _city_id) {
 			}
 		}
 
-		if(selection) {
+		if(selection && Mouse.has_mouse()) {
 			let pos = Mouse.position();
 			let tile = coord_to_tile(map.screen_to_x(pos.x), map.screen_to_y(pos.y));
 			engine.draw('focus', map.x(tile.x*64), map.y(tile.y*64), map.s(64), map.s(64));
-			engine.draw_rect(map.x(tile.x*64), map.y(tile.y*64), map.s(64), map.s(64));
+			// engine.draw_rect(map.x(tile.x*64), map.y(tile.y*64), map.s(64), map.s(64));
 		}
 	}
 

@@ -70,7 +70,15 @@ async function init_player(city_id) {
 		engine.render(() => {
 			city.render();
 		});
-	})
+	});
+
+	document.querySelectorAll('.int_btn_construct').forEach(dom => {
+		dom.addEventListener('click', event => {
+			document.querySelectorAll('.int_construct').forEach(dom => {
+				dom.classList.toggle('shown');
+			})
+		});
+	});
 }
 
 async function init_login() {
