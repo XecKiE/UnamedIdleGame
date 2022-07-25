@@ -2,9 +2,9 @@ import * as db from './DB.js';
 import * as shared from './../../public/js/shared/Shared.js';
 import * as D from './D.js';
 import * as users from './User.js';
+import * as economy from './Economy.js';
 
 export const cityTyle = async (options) => {
-	D.request('dans la fonction des tiles');
 	if(shared.checkOptions(options, ['city_id'])) {
 		let rows = await db.query(`
 			SELECT tile_x, tile_y, building_type_id, building_level, building_rotation, terrain_type_id,health
@@ -53,16 +53,7 @@ export const playerCities = async (options) => {
 			WHERE 1 AND 
 			 ${where_sql}
 		`);
-		console.log(`
-			SELECT c.city_id, c.city_x, c.city_y, c.city_name,
-				r.iron_quantity, r.wood_quantity, r.gold_quantity,
-				r.iron_production, r.wood_production, r.gold_production
-			FROM cities c
-			JOIN ressources r
-				ON r.ressource_id = c.ressource_id
-			WHERE 1 AND 
-			 ${db.int(where_sql)}
-		`);
+
 		let result = [];
 		rows.forEach(function(row) {
 			let line = {
@@ -80,17 +71,16 @@ export const playerCities = async (options) => {
 
 			result.push(line);
 		});
-		console.log(result);
 		if (is_city_id) {
-			D.request('on recupere les tiles');
 			let tiles = await cityTyle(options);
-			D.request('a larrivé:');
+			let ressource = await economy.updateRessources(options);
 			result = result[0];
 			result.tiles = tiles.data;
+			result.iq = parseInt(ressource.iq);
+			result.wq = parseInt(ressource.wq);
+			result.gq = parseInt(ressource.gq);
 		}
 		
-
-		console.log(result);
 		return {data: result};
 }
 

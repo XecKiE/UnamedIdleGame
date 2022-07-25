@@ -19,7 +19,7 @@ export const construct = async (options) => {
 
 		if (data !== [] && data.affectedRows == 1) {
 			console.log(`Je construit une ${options.type}`);
-			economy.updateProduction(options);
+			economy.updateProductions(options);
 			return {data: 'success'};
 
 		}

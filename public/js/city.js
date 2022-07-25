@@ -8,6 +8,9 @@ const City = async function(_engine, _map, _city_id) {
 	let map = _map;
 	let city_id = _city_id;
 	let tiles = [];
+	let name = '';
+	let ressources_qte = {};
+	let ressources_prd = {};
 
 	let available_buildings = [
 		'house',
@@ -32,7 +35,18 @@ const City = async function(_engine, _map, _city_id) {
 			}
 			tiles_modified[data.x][data.y] = data;
 		});
-		console.log(tiles_modified);
+		name = city_info.name;
+		ressources_qte = {
+			iron: city_info.iq,
+			wood: city_info.wq,
+			gold: city_info.gq,
+		}
+		ressources_prd = {
+			iron: city_info.ip,
+			wood: city_info.wp,
+			gold: city_info.gp,
+		}
+
 	}
 	catch (err) {
 		console.log(err)
@@ -173,6 +187,24 @@ const City = async function(_engine, _map, _city_id) {
 				// 	</div>`;
 			});
 		});
+		// Initialise le menu de ressource
+		/*document.querySelectorAll('.int_resources').forEach((dom) => {
+			dom.innerHTML = '';
+			available_buildings.forEach((building) => {
+				let t = document.createElement('div');
+				t.classList.add('building');
+				t.addEventListener('click', () => select_building(t, building));
+				let tt = document.createElement('div');
+				tt.classList.add('building_name');
+				tt.innerText = building.toUpperCase();
+				t.appendChild(tt);
+				let ti = document.createElement('img');
+				ti.classList.add('building_image');
+				ti.src = 'img/sprites/'+building+'.png';
+				t.appendChild(ti);
+				dom.appendChild(t);
+			});
+		});*/
 	}
 
 	function deinit(map) {
