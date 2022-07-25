@@ -39,7 +39,7 @@ export class User {
 			this.connected = true;
 			console.log(this.connected);
 			this.user_id = exist[0].user_id;
-			this.session_id = exist[0].session;
+			this.session_id = exist[0].session_id;
 			return true;
 		}
 		

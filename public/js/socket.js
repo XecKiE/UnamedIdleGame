@@ -3,6 +3,7 @@ const Socket = function() {
 	let message_increment = 1;
 	let timeout = 2000;
 	let timeout_id = null;
+	let reconnect = false;
 
 	let promises = [];
 
@@ -14,6 +15,7 @@ const Socket = function() {
 		if (timeout_id !== null) {
 			clearTimeout(timeout_id);
 			timeout_id = null;
+			reconnect = true;
 		}
 		let ws_url = window.location.protocol.replace('http', 'ws')+'//'+window.location.hostname;
 		if(window.location.hostname == 'localhost' || window.location.hostname == '127.0.0.1') {
@@ -27,6 +29,18 @@ const Socket = function() {
 	}
 
 	async function onopen(event) {
+		if (reconnect) {
+			reconnect = false;
+			let session_id = localStorage.getItem('session_id');
+			if(session_id) {
+				try {
+					let data = await Socket.send('CONNECT', {session_id: session_id});
+					// TOdo les try catch c'est caca. Se mettre d'acord avec thomas pour utiliser error que pour des erreurs type réseau pas prévues. Pas pour juste "j'ai pas pu me logger" ou "j'ai pas pu construire ça"
+				} catch {
+					localStorage.removeItem('session_id')
+				}
+			}
+		}
 		// let data = await send('CONNECT', {user:'test', password:'test'});
 		// TODO ajouter une queue dans que pas authentifié
 	}
@@ -36,6 +50,10 @@ const Socket = function() {
 	async function onclose(event) {
 		timeout_id = setTimeout(function() { init(); }, timeout);
 		timeout *= 2;
+		document.querySelectorAll('.opt_reload').forEach(dom => {
+			dom.classList.remove('hidden');
+		});
+		
 		// TODO relancer init toutes les 2-4-8-16-32-64-... secondes
 	}
 	async function onmessage(event) {

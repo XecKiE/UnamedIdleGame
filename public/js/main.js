@@ -80,6 +80,12 @@ async function init_login() {
 			document.querySelectorAll('.interface').forEach(dom => dom.classList.add('hidden'));
 		});
 	});
+	document.querySelectorAll('.opt_reload').forEach(dom => {
+		dom.addEventListener('click', event => {
+			dom.classList.add('hidden');
+			Socket.init();
+		});
+	});
 	// TODO on peut pas se déco reco
 
 	// TODO si on réouvre la connexion dynamiquement on sera pas authentifié faut gérer ça du coup dans socket.js de manière propre

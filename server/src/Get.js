@@ -2,7 +2,7 @@ import * as db from './DB.js';
 import * as shared from './../../public/js/shared/Shared.js';
 
 
-export const exportModifiedCityTile = async (options) => {
+export const city_tyle = async (options) => {
 	if(shared.checkOptions(options, ['city_id'])) {
 		let rows = await db.query(`
 			SELECT tile_x, tile_y, building_type_id, building_level, building_rotation, terrain_type_id,health
@@ -30,12 +30,12 @@ export const exportModifiedCityTile = async (options) => {
 	}
 }
 
-export const exportPlayerCity = async (options) => {
+export const player_city = async (options) => {
 
 	if(shared.checkOptions(options, ['city_id'])) {
 		let rows = await db.query(`
 			SELECT city_id, city_x, city_y, city_name
-			FROM city
+			FROM cities
 			WHERE user_id = ${parseInt(options.user_id)}
 		`);
 		let result = [];

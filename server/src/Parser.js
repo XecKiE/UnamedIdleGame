@@ -11,8 +11,8 @@ const func_map = {
 	'DESTRUCT': build.destruct,
 	'TERRAFORM': build.construct,
 	'GET': {
-		'CITY_TILE': get.exportModifiedCityTile,
-		'PLAYER_CITY': get.exportPlayerCity,
+		'CITY_TILE': get.city_tyle,
+		'PLAYER_CITY': get.player_city,
 	},
 
 };
@@ -30,7 +30,7 @@ async function _checkConnection(options) {
 			if (await users.users_list[options.user_id].connect(options)) {
 				let row = await db.query(`
 					SELECT city_id
-					FROM city
+					FROM cities
 					JOIN users USING(user_id)
 					WHERE user_id = ${db.int(users.users_list[options.user_id].user_id)} LIMIT 1
 				`);
