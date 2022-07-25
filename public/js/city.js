@@ -8,7 +8,7 @@ const City = async function(_engine, _map, _city_id) {
 	let map = _map;
 	let city_id = _city_id;
 	let tiles = [];
-	let name = '';
+	let city_name = '';
 	let ressources_qte = {};
 	let ressources_prd = {};
 
@@ -35,7 +35,7 @@ const City = async function(_engine, _map, _city_id) {
 			}
 			tiles_modified[data.x][data.y] = data;
 		});
-		name = city_info.name;
+		city_name = city_info.name;
 		ressources_qte = {
 			iron: city_info.iq,
 			wood: city_info.wq,
@@ -188,23 +188,30 @@ const City = async function(_engine, _map, _city_id) {
 			});
 		});
 		// Initialise le menu de ressource
-		/*document.querySelectorAll('.int_resources').forEach((dom) => {
+		document.querySelectorAll('.int_resources').forEach((dom) => {
 			dom.innerHTML = '';
-			available_buildings.forEach((building) => {
+			['iron', 'gold', 'wood'].forEach((ressource) => {
 				let t = document.createElement('div');
-				t.classList.add('building');
-				t.addEventListener('click', () => select_building(t, building));
+				t.classList.add('ressource');
 				let tt = document.createElement('div');
-				tt.classList.add('building_name');
-				tt.innerText = building.toUpperCase();
+				tt.classList.add('ressource_name');
+				tt.innerText = ressource.toUpperCase()+' : '+ressources_qte[ressource];
 				t.appendChild(tt);
 				let ti = document.createElement('img');
-				ti.classList.add('building_image');
-				ti.src = 'img/sprites/'+building+'.png';
+				ti.classList.add('ressource_image');
+				ti.src = 'img/sprites/'+ressource+'.png';
 				t.appendChild(ti);
 				dom.appendChild(t);
 			});
-		});*/
+		});
+
+		document.querySelectorAll('.int_city').forEach((dom) => {
+			dom.innerHTML = '';
+			let t = document.createElement('div');
+			t.classList.add('city_name');
+			t.innerText = 'City : '+city_name+'';
+			dom.appendChild(t);
+		});
 	}
 
 	function deinit(map) {

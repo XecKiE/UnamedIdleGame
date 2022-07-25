@@ -10,12 +10,20 @@
 }
 
 
-.int_menu, .int_cities_armies {
+.int_menu, .int_cities_armies, int_cities_armies_open {
 	align-self: flex-start;
 }
 
 .int_construct {
 	justify-self: center;
+}
+.int_ressource {
+	justify-self: center;
+	display: inline-block;
+}
+.ressource, .ressource_name {
+	justify-self: center;
+	display: inline-block;
 }
 
 .int_btn_mobile {
@@ -36,10 +44,12 @@
 .int_city              { grid-area: city;              }
 .int_notifs            { grid-area: notifs;            }
 .int_cities_armies     { grid-area: cities_armies;     }
+.int_cities_armies_open { grid-area: cities_armies_open;        }
 .int_options           { grid-area: options;           }
 .int_menu              { grid-area: menu;              }
 .int_construct         { grid-area: construct;         }
 .int_btn_mobile        { grid-area: btn_mobile;        }
+
 
 
 
