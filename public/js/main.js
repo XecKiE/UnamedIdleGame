@@ -41,6 +41,10 @@ Resources.load_img({
 	'tree1': 'img/sprites/tree1.png',
 	'tree2': 'img/sprites/tree2.png',
 	'tree3': 'img/sprites/tree3.png',
+	'iron_mine': 'img/sprites/iron_mine.png',
+	'iron': 'img/sprites/iron.png',
+	'gold_mine': 'img/sprites/gold_mine.png',
+	'gold': 'img/sprites/gold.png',
 })
 Mouse.disable_context_menu();
 window.onload = async function() {

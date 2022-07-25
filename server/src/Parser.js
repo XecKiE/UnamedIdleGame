@@ -3,6 +3,7 @@ import * as users from './User.js';
 import * as get from './Get.js';
 import * as db from './DB.js';
 
+
 const func_map = {
 	'REGISTER': _register,
 	'CONNECT': _checkConnection,
@@ -11,8 +12,9 @@ const func_map = {
 	'DESTRUCT': build.destruct,
 	'TERRAFORM': build.construct,
 	'GET': {
-		'CITY_TILE': get.city_tyle,
-		'PLAYER_CITY': get.player_city,
+		'CITY_TILE': get.cityTyle,
+		'PLAYER_CITIES': get.playerCities,
+		'CITY_RESSOURCE': get.cityRessource
 	},
 
 };

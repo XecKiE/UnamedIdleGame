@@ -1,4 +1,5 @@
 import * as db from './DB.js';
+import * as economy from './Economy.js';
 import * as shared from './../../public/js/shared/Shared.js';
 
 
@@ -18,7 +19,9 @@ export const construct = async (options) => {
 
 		if (data !== [] && data.affectedRows == 1) {
 			console.log(`Je construit une ${options.type}`);
+			economy.updateProduction(options);
 			return {data: 'success'};
+
 		}
 		else {
 			return {error: 'unable to insert data'};

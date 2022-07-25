@@ -12,6 +12,8 @@ const City = async function(_engine, _map, _city_id) {
 	let available_buildings = [
 		'house',
 		'watchtower',
+		'iron_mine',
+		'gold_mine',
 	];
 
 	let selection = null;
@@ -20,10 +22,10 @@ const City = async function(_engine, _map, _city_id) {
 		city_id: city_id
 	};
 	try {
-		let modified = await Socket.send('GET CITY_TILE', options);
-		console.log(modified, city_id)
+		let city_info = await Socket.send('GET PLAYER_CITIES', options);
+		console.log(city_info, city_id)
 		var tiles_modified = [];
-		modified.forEach(function(data) {
+		city_info.tiles.forEach(function(data) {
 			if (tiles_modified[data.x] === undefined) {
 				tiles_modified[data.x] = [];
 			}

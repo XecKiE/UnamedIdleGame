@@ -1,8 +1,10 @@
 import * as db from './DB.js';
 import * as shared from './../../public/js/shared/Shared.js';
+import * as D from './D.js';
+import * as users from './User.js';
 
-
-export const city_tyle = async (options) => {
+export const cityTyle = async (options) => {
+	D.request('dans la fonction des tiles');
 	if(shared.checkOptions(options, ['city_id'])) {
 		let rows = await db.query(`
 			SELECT tile_x, tile_y, building_type_id, building_level, building_rotation, terrain_type_id,health
@@ -30,13 +32,36 @@ export const city_tyle = async (options) => {
 	}
 }
 
-export const player_city = async (options) => {
+export const playerCities = async (options) => {
 
-	if(shared.checkOptions(options, ['city_id'])) {
+	let where_sql = ``;
+	let is_city_id = false;
+	if(is_city_id = shared.checkOptions(options, ['city_id'])) {
+		where_sql = `c.city_id = ${db.int(options.city_id)}`;
+	}
+	else {
+		where_sql = `c.user_id = ${db.int(users.users_list[options.user_id].user_id)}`
+	}
+	console.log(where_sql);
 		let rows = await db.query(`
-			SELECT city_id, city_x, city_y, city_name
-			FROM cities
-			WHERE user_id = ${parseInt(options.user_id)}
+			SELECT c.city_id, c.city_x, c.city_y, c.city_name,
+				r.iron_quantity, r.wood_quantity, r.gold_quantity,
+				r.iron_production, r.wood_production, r.gold_production
+			FROM cities c
+			JOIN ressources r
+				ON r.ressource_id = c.ressource_id
+			WHERE 1 AND 
+			 ${where_sql}
+		`);
+		console.log(`
+			SELECT c.city_id, c.city_x, c.city_y, c.city_name,
+				r.iron_quantity, r.wood_quantity, r.gold_quantity,
+				r.iron_production, r.wood_production, r.gold_production
+			FROM cities c
+			JOIN ressources r
+				ON r.ressource_id = c.ressource_id
+			WHERE 1 AND 
+			 ${db.int(where_sql)}
 		`);
 		let result = [];
 		rows.forEach(function(row) {
@@ -44,16 +69,38 @@ export const player_city = async (options) => {
 				city_id: row.city_id,
 				x: row.city_x,
 				y: row.city_y,
-				name: row.city_name
+				name: row.city_name,
+				iq: row.iron_quantity,
+				wq: row.wood_quantity,
+				gq: row.gold_quantity,
+				ip: row.iron_production,
+				wp: row.wood_production,
+				gp: row.gold_production,
 			};
 
 			result.push(line);
 		});
 		console.log(result);
+		if (is_city_id) {
+			D.request('on recupere les tiles');
+			let tiles = await cityTyle(options);
+			D.request('a larrivé:');
+			result = result[0];
+			result.tiles = tiles.data;
+		}
+		
+
+		console.log(result);
 		return {data: result};
-	}
 }
+
 
 export const exportCity = async (options) => {
 
+}
+
+export const cityRessource = async (options) => {
+	if(shared.checkOptions(options, ['city_id'])) {
+
+	}
 }

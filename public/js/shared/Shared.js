@@ -9,8 +9,9 @@ const CB = {
 	PANTHEON:    7,
 	watchtower: 8,
 	CASERNE:     9,
-	MINAGE_FER:  1,
-	MINAGE_BOIS: 1,
+	iron_mine:  10,
+	wood_camp: 11,
+	gold_mine: 12,
 }
 
 // Constantes Building inversées
@@ -18,6 +19,32 @@ const CBR = {};
 for(let i in CB) {
 	CBR[CB[i]] = i;
 }
+
+//constante economy
+const economyProduction = {
+	iron_mine: {
+		1: 10,
+		2: 13,
+		3: 17,
+		4: 21,
+		5: 25,
+
+	},
+	gold_mine: {
+		1: 2,
+		2: 4,
+		3: 7,
+		4: 10,
+	},
+	wood_camp: {
+		1: 10,
+		2: 13,
+		3: 17,
+		4: 21,
+		5: 25,
+	},
+}
+
 
 // Constantes Terrain
 const CT = {
@@ -43,7 +70,8 @@ export const checkOptions = (options, needed) => {
 
 export {
 	CB,
-	CBR
+	CBR,
+	economyProduction,
 }
 
 
