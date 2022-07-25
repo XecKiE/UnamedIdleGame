@@ -45,6 +45,8 @@ Resources.load_img({
 	'iron': 'img/sprites/iron.png',
 	'gold_mine': 'img/sprites/gold_mine.png',
 	'gold': 'img/sprites/gold.png',
+	'wood_camp': 'img/sprites/wood_camp.png',
+	'wood': 'img/sprites/wood.png',
 })
 Mouse.disable_context_menu();
 window.onload = async function() {

@@ -1,9 +1,18 @@
 import * as db from './DB.js';
 import * as shared from './../../public/js/shared/Shared.js';
+import * as D from './D.js';
 
 export const updateProduction = async (options) => {
 	if (options.hasOwnProperty('city_id')) {
 		let result = await db.query(`
+			SELECT c.ressource_id AS rid, t.building_type_id AS bt, t.building_level AS bl
+			FROM cities c
+			JOIN tiles t
+				ON t.city_id = c.city_id
+				AND t.building_type_id IN (${shared.CB.iron_mine}, ${shared.CB.gold_mine}, ${shared.CB.wood_camp})
+			WHERE c.city_id = ${db.int(options.city_id)}
+		`);
+		D.ws(`
 			SELECT c.ressource_id AS rid, t.building_type_id AS bt, t.building_level AS bl
 			FROM cities c
 			JOIN tiles t
@@ -18,15 +27,26 @@ export const updateProduction = async (options) => {
 				wood_camp: 0,
 			};
 			result.forEach(function(line) {
-				production[shared.CBR[line.bt]] += economyProduction[shared.CBR[line.bt]];
+				production[shared.CBR[line.bt]] += parseInt(shared.economyProduction[shared.CBR[line.bt]][line.bl]);
+				console.log(line);
+				console.log(shared.CBR[line.bt]);
+				console.log(shared.economyProduction[shared.CBR[line.bt]][line.bl]);
 			});
-
+			console.log(production);
+			console.log(result);
 			await db.query(`
 				UPDATE ressources
-				SET iron_production = ${production.iron_mine},
-					wood_production = ${production.wood_camp},
-					gold_production = ${production.gold_mine}
-				WHERE ressource_id = ${db.int(result.rid)}
+				SET iron_production = ${db.int(production.iron_mine)},
+					wood_production = ${db.int(production.wood_camp)},
+					gold_production = ${db.int(production.gold_mine)}
+				WHERE ressource_id = ${db.int(result[0].rid)}
+			`);
+			console.log(`
+				UPDATE ressources
+				SET iron_production = ${db.int(production.iron_mine)},
+					wood_production = ${db.int(production.wood_camp)},
+					gold_production = ${db.int(production.gold_mine)}
+				WHERE ressource_id = ${db.int(result[0].rid)}
 			`);
 
 		}

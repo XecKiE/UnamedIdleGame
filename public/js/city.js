@@ -14,6 +14,7 @@ const City = async function(_engine, _map, _city_id) {
 		'watchtower',
 		'iron_mine',
 		'gold_mine',
+		'wood_camp',
 	];
 
 	let selection = null;
