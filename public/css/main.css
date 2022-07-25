@@ -5,6 +5,7 @@ html, body {
 	padding: 0;
 	color: var(--c-light);
 	font-family: Lato, Tahoma, Geneva, sans-serif;
+	overscroll-behavior: contain;
 }
 * {
 	box-sizing: border-box;
@@ -58,4 +59,8 @@ html, body {
 }
 .btn:hover {
 	background-color: var(--c-medium);
+}
+
+b {
+	font-weight: bolder;
 }

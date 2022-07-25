@@ -16,7 +16,7 @@
 // }
 
 
-import {Engine, Resources, Map, Mouse} from './engine/engine.js';
+import {Engine, Resources, Mouse, Touches} from './engine/main.js';
 import City from './city.js';
 import Socket from './socket.js';
 
@@ -64,6 +64,7 @@ async function init_player(city_id) {
 		map = engine.add_map();
 		city = await City(engine, map, city_id);
 		city.init();
+		// Touches.add_listener(can);
 
 
 		engine.render(() => {
