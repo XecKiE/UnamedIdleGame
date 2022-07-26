@@ -26,6 +26,11 @@
 	display: inline-block;
 }
 
+.selected_city {
+	justify-self: center;
+	text-decoration: underline;
+}
+
 .int_btn_mobile {
 	display: none;
 }

@@ -1,6 +1,5 @@
 import * as db from './DB.js';
 import * as shared from './../../public/js/shared/Shared.js';
-<<<<<<< HEAD
 import * as D from './D.js';
 
 export const updateProductions = async (options) => {

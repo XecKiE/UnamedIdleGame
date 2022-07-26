@@ -4,7 +4,7 @@ const CB = {
 	road:       2,
 	TAVERNE:     3,
 	house:      4,
-	AUTEL:       5,
+	autel:       5,
 	TEMPLE:      6,
 	PANTHEON:    7,
 	watchtower: 8,
@@ -60,19 +60,19 @@ for(let i in CT) {
 
 
 export const checkOptions = (options, needed) => {
+	let has = true;
 	needed.forEach(function(a) {
-		if(!options.hasOwnProperty(a)) {
-				return false;
+		if(options.hasOwnProperty(a) === false) {
+				has = false;
 		}
 	})
-	return true;
+	return has;
 }
 
 export {
 	CB,
 	CBR,
 	economyProduction,
-	production
 }
 
 

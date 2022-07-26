@@ -18,11 +18,13 @@
 
 import {Engine, Resources, Mouse, Touches} from './engine/main.js';
 import City from './city.js';
+import Interface from './interface.js';
 import Socket from './socket.js';
 
 
 var engine = null;
 var map = null;
+var inter = null
 var city = null;
 var city_data = null;
 Resources.load_img({
@@ -36,6 +38,7 @@ Resources.load_img({
 	'mud': 'img/sprites/mud.png',
 	'road': 'img/sprites/road.png',
 	'house': 'img/sprites/house.png',
+	'autel': 'img/sprites/autel.png',
 	'watchtower': 'img/sprites/watchtower.png',
 	'tree0': 'img/sprites/tree0.png',
 	'tree1': 'img/sprites/tree1.png',
@@ -62,13 +65,15 @@ async function init_player(city_id) {
 
 		engine = Engine(can);
 		map = engine.add_map();
-		city = await City(engine, map, city_id);
-		city.init();
+		inter = await Interface(engine, map);
+		await inter.init(city_id);
+		//city = await City(engine, map, city_id);
+		//city.init();
 		// Touches.add_listener(can);
 
 
 		engine.render(() => {
-			city.render();
+			inter.render();
 		});
 	});
 

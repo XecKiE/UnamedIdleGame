@@ -4,10 +4,6 @@ import * as D from './D.js';
 import * as users from './User.js';
 import * as economy from './Economy.js';
 
-<<<<<<< HEAD
-=======
-
->>>>>>> ajout du début de l'economie
 export const cityTyle = async (options) => {
 	if(shared.checkOptions(options, ['city_id'])) {
 		let rows = await db.query(`
@@ -38,8 +34,10 @@ export const cityTyle = async (options) => {
 
 export const playerCities = async (options) => {
 	let where_sql = ``;
-	let is_city_id = false;
-	if(is_city_id = shared.checkOptions(options, ['city_id'])) {
+	console.log(options);
+	console.log(shared.checkOptions(options, ['city_id']))
+	let is_city_id = shared.checkOptions(options, ['city_id']);
+	if(is_city_id === true) {
 		where_sql = `c.city_id = ${db.int(options.city_id)}`;
 	}
 	else {

@@ -18,6 +18,7 @@ const City = async function(_engine, _map, _city_id) {
 		'iron_mine',
 		'gold_mine',
 		'wood_camp',
+		'autel',
 	];
 
 	let selection = null;
@@ -82,12 +83,12 @@ const City = async function(_engine, _map, _city_id) {
 			}
 		}
 
-		if(selection && Mouse.has_mouse()) {
+		/*if(selection && Mouse.has_mouse()) {
 			let pos = Mouse.position();
 			let tile = coord_to_tile(map.screen_to_x(pos.x), map.screen_to_y(pos.y));
 			engine.draw('focus', map.x(tile.x*64), map.y(tile.y*64), map.s(64), map.s(64));
 			// engine.draw_rect(map.x(tile.x*64), map.y(tile.y*64), map.s(64), map.s(64));
-		}
+		}*/
 	}
 
 	function mousedown(x, y, button) {
@@ -116,102 +117,12 @@ const City = async function(_engine, _map, _city_id) {
 		}
 	}
 
-	function select_building(dom, building) {
-		if(dom.classList.contains('selected')) {
-			dom.classList.remove('selected');
-			map.set_frozen(false);
-			selection = null;
-		} else {
-			document.querySelectorAll('.building').forEach((d) => d.classList.remove('selected'));
-			dom.classList.add('selected');
-			map.set_frozen(true);
-			selection = {
-				type: 'construct',
-				value: building,
-				onclick: async (x, y, button) => {
-					if(button == 0) {
-						if (CB.hasOwnProperty(building)) {
-							try {
-								let options = {
-									city_id: city_id,
-									type: CB[building],
-									x: x,
-									y: y,
-									rotation: 0,
-								};
-								await Socket.send('BUILD', options);
-								tiles[x][y].building = building;
-							}
-							catch (err) {
-								console.log(err);	
-							}
-						}
-						
-						
-					}
-				},
-			};
-		}
-	}
+	
 		
 
 	function init() {
-		map.focus(64*64, 64*64, .5);
+		
 
-
-		// Initialise les inputs avec la map
-		map.mousedown(mousedown);
-		map.mouseup(mouseup);
-
-		// Initialise le menu de construction
-		document.querySelectorAll('.int_construct').forEach((dom) => {
-			dom.innerHTML = '';
-			available_buildings.forEach((building) => {
-				let t = document.createElement('div');
-				t.classList.add('building');
-				t.addEventListener('click', () => select_building(t, building));
-				let tt = document.createElement('div');
-				tt.classList.add('building_name');
-				tt.innerText = building.toUpperCase();
-				t.appendChild(tt);
-				let ti = document.createElement('img');
-				ti.classList.add('building_image');
-				ti.src = 'img/sprites/'+building+'.png';
-				t.appendChild(ti);
-				dom.appendChild(t);
-				// ça c'est vachemnet plus lisible mais vu que j'ai accès à rien dans le contexte global je peux pas mettre de onclick. Une idée ?
-				// dom.innerHTML += `
-				// 	<div class="building">
-				// 		<div class="building_name">${building.toUpperCase()}</div>
-				// 		<img class="building_image" src="img/sprites/${building}.png"/>
-				// 	</div>`;
-			});
-		});
-		// Initialise le menu de ressource
-		document.querySelectorAll('.int_resources').forEach((dom) => {
-			dom.innerHTML = '';
-			['iron', 'gold', 'wood'].forEach((ressource) => {
-				let t = document.createElement('div');
-				t.classList.add('ressource');
-				let tt = document.createElement('div');
-				tt.classList.add('ressource_name');
-				tt.innerText = ressource.toUpperCase()+' : '+ressources_qte[ressource];
-				t.appendChild(tt);
-				let ti = document.createElement('img');
-				ti.classList.add('ressource_image');
-				ti.src = 'img/sprites/'+ressource+'.png';
-				t.appendChild(ti);
-				dom.appendChild(t);
-			});
-		});
-
-		document.querySelectorAll('.int_city').forEach((dom) => {
-			dom.innerHTML = '';
-			let t = document.createElement('div');
-			t.classList.add('city_name');
-			t.innerText = 'City : '+city_name+'';
-			dom.appendChild(t);
-		});
 	}
 
 	function deinit(map) {
@@ -225,6 +136,9 @@ const City = async function(_engine, _map, _city_id) {
 		init: init,
 		deinit: deinit,
 		click: click,
+		tiles: tiles,
+		city_name: city_name,
+		ressources_qte: ressources_qte,
 	}
 }
 
