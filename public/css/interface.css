@@ -1,6 +1,8 @@
 .interface {
 	display: grid;
+	position: absolute;
 	height: 100%;
+	width: 100%;
 	grid-template-columns: 150px 1fr 100px 1fr 150px;
 	grid-template-rows: 100px 50px 1fr 100px;
 	grid-template-areas: "world     resources city      notifs    options      "
@@ -9,9 +11,40 @@
 	                     "construct construct construct construct construct    ";
 }
 
+.floating_menu {
+	position: absolute;
+	width: 80%;
+	height: 80%;
+	left: 10%;
+	top: 10%;
+
+	z-index: 1;
+	background-color: var(--c-background-popup);;
+	color: white;
+}
+.floating_menu .close_floating {
+	position: absolute;
+	right: 0%;
+	top: 0%;
+
+	z-index: 1;
+	background-color: var(--c-background-popup);;
+	color: red;
+	font-size: 2em;
+}
+.floating_menu .floating_header {
+	text-align: center;
+	text-decoration: underline;
+
+}
 
 .int_menu, .int_cities_armies, int_cities_armies_open {
 	align-self: flex-start;
+	justify-self: center;
+}
+.int_menu_army_recrut, .int_menu_army, .int_menu_recherche, .int_menu_commerce, .int_menu_guild {
+	align-self: flex-start;
+	text-decoration: underline;
 }
 
 .int_construct {
@@ -87,6 +120,17 @@
 							 "main"
 							 "bar"
 							 "btn_mobile";
+	}
+	.floating_menu {
+		position: absolute;
+		width: 80%;
+		height: 65%;
+		left: 10%;
+		top: 20%;
+
+		z-index: 1;
+		background-color: var(--c-background-popup);;
+		color: white;
 	}
 	.int_world, .int_notifs, .int_cities_armies, .int_options, .int_menu {
 		display: none;

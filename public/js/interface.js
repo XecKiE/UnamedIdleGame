@@ -67,6 +67,128 @@ const Interface = async function(_engine, _map) {
 		}
 	}
 
+	function show_recrutement() {
+		document.querySelectorAll('.floating_menu').forEach(function(dom) {
+			let head = document.createElement('div');
+			head.innerText = 'Recrutement des troupes';
+			head.classList.add('floating_header');
+
+			let close = document.createElement('div');
+			close.classList.add('close_floating');
+			close.innerText = 'X';
+			close.addEventListener('click', function (event) {
+				dom.classList.add('hidden');
+			});
+			dom.appendChild(head);
+			dom.appendChild(close);
+
+		});
+	}
+
+	function show_army() {
+		document.querySelectorAll('.floating_menu').forEach(function(dom) {
+			let head = document.createElement('div');
+			head.innerText = 'Gestions des armées de la ville';
+			head.classList.add('floating_header');
+
+			let close = document.createElement('div');
+			close.classList.add('close_floating');
+			close.innerText = 'X';
+			close.addEventListener('click', function (event) {
+				dom.classList.add('hidden');
+			});
+			dom.appendChild(head);
+			dom.appendChild(close);
+
+		});
+	}
+
+	function show_recherche() {
+		document.querySelectorAll('.floating_menu').forEach(function(dom) {
+			let head = document.createElement('div');
+			head.innerText = 'Recherches';
+			head.classList.add('floating_header');
+
+			let close = document.createElement('div');
+			close.classList.add('close_floating');
+			close.innerText = 'X';
+			close.addEventListener('click', function (event) {
+				dom.classList.add('hidden');
+			});
+			dom.appendChild(head);
+			dom.appendChild(close);
+
+		});
+	}
+
+	function show_commerce() {
+		document.querySelectorAll('.floating_menu').forEach(function(dom) {
+			let head = document.createElement('div');
+			head.innerText = 'Gestions des caravanes commerciales';
+			head.classList.add('floating_header');
+
+			let close = document.createElement('div');
+			close.classList.add('close_floating');
+			close.innerText = 'X';
+			close.addEventListener('click', function (event) {
+				dom.classList.add('hidden');
+			});
+			dom.appendChild(head);
+			dom.appendChild(close);
+
+		});
+	}
+
+	function show_guild() {
+		document.querySelectorAll('.floating_menu').forEach(function(dom) {
+			let head = document.createElement('div');
+			head.innerText = 'Gestion de la guilde';
+			head.classList.add('floating_header');
+
+			let close = document.createElement('div');
+			close.classList.add('close_floating');
+			close.innerText = 'X';
+			close.addEventListener('click', function (event) {
+				dom.classList.add('hidden');
+			});
+			dom.appendChild(head);
+			dom.appendChild(close);
+
+		});
+	}
+
+
+	function show_menu(type) {
+		document.querySelectorAll('.floating_menu').forEach(function(dom) {
+			dom.classList.remove('hidden');
+			dom.innerHTML = '';
+			dom.childNodes.forEach(function (child) {
+				dom.removeChild(child);
+			});
+		});
+		switch(type) {
+			case 'army_recrut':
+				show_recrutement();
+				break;
+			case 'army':
+				show_army();
+				break;
+			case 'recherche':
+				show_recherche();
+				break;
+			case 'commerce':
+				show_commerce();
+				break;
+			case 'guild':
+				show_guild();
+				break;
+			default:
+				console.log('pas de menu trouvé');
+		}
+
+
+	}
+
 	function select_building(dom, building) {
 		if(dom.classList.contains('selected')) {
 			dom.classList.remove('selected');
@@ -176,21 +298,6 @@ const Interface = async function(_engine, _map) {
 				})
 			});
 		});
-	}
-
-	async function init_city(city_id) {
-		engine.force_resize();
-		map.focus(64*64, 64*64, .5);
-
-
-		// Initialise les inputs avec la map
-		map.mousedown(mousedown);
-		map.mouseup(mouseup);
-
-		let city = await City(engine, map, city_id);
-		city.init();
-		city_list[city_id] = city;
-		curent_city_id = city_id;
 
 		// Initialise le menu de construction
 		document.querySelectorAll('.int_construct').forEach((dom) => {
@@ -210,6 +317,39 @@ const Interface = async function(_engine, _map) {
 				dom.appendChild(t);
 			});
 		});
+
+		document.querySelectorAll('.int_menu_army_recrut').forEach((dom) => {
+			dom.addEventListener('click', () => show_menu('army_recrut'));
+		});
+		document.querySelectorAll('.int_menu_army').forEach((dom) => {
+			dom.addEventListener('click', () => show_menu('army'));
+		});
+		document.querySelectorAll('.int_menu_recherche').forEach((dom) => {
+			dom.addEventListener('click', () => show_menu('recherche'));
+		});
+		document.querySelectorAll('.int_menu_commerce').forEach((dom) => {
+			dom.addEventListener('click', () => show_menu('commerce'));
+		});
+		document.querySelectorAll('.int_menu_guild').forEach((dom) => {
+			dom.addEventListener('click', () => show_menu('guild'));
+		});
+	}
+
+	async function init_city(city_id) {
+		engine.force_resize();
+		map.focus(64*64, 64*64, .5);
+
+
+		// Initialise les inputs avec la map
+		map.mousedown(mousedown);
+		map.mouseup(mouseup);
+
+		let city = await City(engine, map, city_id);
+		city.init();
+		city_list[city_id] = city;
+		curent_city_id = city_id;
+
+		
 		// Initialise le menu de ressource
 		update_ressource();
 		update_cityName();
