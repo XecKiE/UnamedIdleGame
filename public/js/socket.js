@@ -33,12 +33,7 @@ const Socket = function() {
 			reconnect = false;
 			let session_id = localStorage.getItem('session_id');
 			if(session_id) {
-				try {
-					let data = await Socket.send('CONNECT', {session_id: session_id});
-					// TOdo les try catch c'est caca. Se mettre d'acord avec thomas pour utiliser error que pour des erreurs type réseau pas prévues. Pas pour juste "j'ai pas pu me logger" ou "j'ai pas pu construire ça"
-				} catch {
-					localStorage.removeItem('session_id')
-				}
+				authenticate();
 			}
 		}
 		// let data = await send('CONNECT', {user:'test', password:'test'});
@@ -90,9 +85,22 @@ const Socket = function() {
 		});
 	}
 
+	async function authenticate(credentials = null) {
+		let data = await Socket.send('CONNECT', credentials ? credentials : {session_id: localStorage.getItem('session_id')});
+		console.log(data);
+		if(data.success) {
+			localStorage.setItem('session_id', data.session_id)
+			return data.city_id;
+		} else {
+			localStorage.removeItem('session_id')
+			return false;
+		}
+	}
+
 
 	return {
 		send: send,
+		authenticate: authenticate,
 	};
 }();
 

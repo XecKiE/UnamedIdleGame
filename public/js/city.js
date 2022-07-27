@@ -19,7 +19,6 @@ const City = async function(_engine, _map, _city_id) {
 	};
 	try {
 		let city_info = await Socket.send('GET PLAYER_CITIES', options);
-		console.log(city_info, city_id)
 		var tiles_modified = [];
 		city_info.tiles.forEach(function(data) {
 			if (tiles_modified[data.x] === undefined) {
@@ -95,7 +94,6 @@ const City = async function(_engine, _map, _city_id) {
 	}
 
 	function click(x, y, button) {
-		console.log('on click la ville');
 		let tile = coord_to_tile(map.screen_to_x(x), map.screen_to_y(y));
 		tiles[x][y].onclick();
 	}

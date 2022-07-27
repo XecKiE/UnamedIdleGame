@@ -11,7 +11,6 @@ let building_function = {
 };
 
 let default_func = await function (options) {
-	console.log('coucou default');
 
 }
 
@@ -41,11 +40,8 @@ const CityData = function(city_id, _tiles_modified) {
 
 		if(tiles_modified[i] !== undefined && tiles_modified[i][j] !== undefined) {
 			building = CBR[tiles_modified[i][j].b];
-			console.log(building_function[CBR[tiles_modified[i][j].b]]);
 			if (building_function[CBR[tiles_modified[i][j].b]]) {
-				console.log('on assigne un nouveau');
 				func = building_function[CBR[tiles_modified[i][j].b]];
-				console.log(func);
 			}
 			else {
 				func = default_func;

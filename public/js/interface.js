@@ -29,13 +29,15 @@ const Interface = async function(_engine, _map) {
 
 
 	function render() {
-		city_list[curent_city_id].render();
-		if(selection && Mouse.has_mouse()) {
-			let pos = Mouse.position();
-			let tile = coord_to_tile(map.screen_to_x(pos.x), map.screen_to_y(pos.y));
+		if(city_list[curent_city_id]) {
+			city_list[curent_city_id].render();
+			if(selection && Mouse.has_mouse()) {
+				let pos = Mouse.position();
+				let tile = coord_to_tile(map.screen_to_x(pos.x), map.screen_to_y(pos.y));
 
-			engine.draw('focus', map.x(tile.x*64), map.y(tile.y*64), map.s(64), map.s(64));
-			// engine.draw_rect(map.x(tile.x*64), map.y(tile.y*64), map.s(64), map.s(64));
+				engine.draw('focus', map.x(tile.x*64), map.y(tile.y*64), map.s(64), map.s(64));
+				// engine.draw_rect(map.x(tile.x*64), map.y(tile.y*64), map.s(64), map.s(64));
+			}
 		}
 	}
 
@@ -52,9 +54,7 @@ const Interface = async function(_engine, _map) {
 	}
 
 	function click(x, y, button) {
-		console.log('on click linterface');
 		if(selection) {
-			console.log(x, y);
 			selection.onclick(x, y, button);
 		}
 		city_list[curent_city_id].click(x, y, button);
@@ -168,7 +168,18 @@ const Interface = async function(_engine, _map) {
 		update_PlayerCities();
 	}
 
-	async function init(city_id) {
+	async function init() {
+		document.querySelectorAll('.int_btn_construct').forEach(dom => {
+			dom.addEventListener('click', event => {
+				document.querySelectorAll('.int_construct').forEach(dom => {
+					dom.classList.toggle('shown');
+				})
+			});
+		});
+	}
+
+	async function init_city(city_id) {
+		engine.force_resize();
 		map.focus(64*64, 64*64, .5);
 
 
@@ -216,6 +227,7 @@ const Interface = async function(_engine, _map) {
 	return {
 		render: render,
 		init: init,
+		init_city: init_city,
 		deinit: deinit,
 		click: click,
 	}

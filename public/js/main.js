@@ -1,32 +1,8 @@
-// console.log('coucou');
-
-
-// export function yo() {
-// 	console.log('yo');
-// }
-
-
-
-// import Engine from './engine/engine.js';
-// var a = [];
-// window.onload = function() {
-// 	document.querySelectorAll('canvas').forEach((can) => {
-// 		a.push(new Engine(can));
-// 	})
-// }
-
-
-import {Engine, Resources, Mouse, Touches} from './engine/main.js';
-import City from './city.js';
+import {Engine, Resources, Mouse} from './engine/main.js';
 import Interface from './interface.js';
 import Socket from './socket.js';
 
 
-var engine = null;
-var map = null;
-var inter = null
-var city = null;
-var city_data = null;
 Resources.load_img({
 	'wolf': 'img/favicon.png',
 	'cow': 'img/placeholder.png',
@@ -38,6 +14,7 @@ Resources.load_img({
 	'mud': 'img/sprites/mud.png',
 	'road': 'img/sprites/road.png',
 	'house': 'img/sprites/house.png',
+	'wooden_house': 'img/sprites/wooden_house.png',
 	'autel': 'img/sprites/autel.png',
 	'watchtower': 'img/sprites/watchtower.png',
 	'tree0': 'img/sprites/tree0.png',
@@ -53,39 +30,29 @@ Resources.load_img({
 	'caserne': 'img/sprites/caserne.png',
 })
 Mouse.disable_context_menu();
+
+
+let inter = null;
+
 window.onload = async function() {
-	init_login();
-	// init_player();
+	await init_engine();
+	await inter.init();
+	await init_login();
+
+	document.querySelectorAll('.loading').forEach((dom) => dom.classList.add('fade'));
 }
 
 
 async function init_player(city_id) {
 	document.querySelectorAll('.authentification').forEach(dom => dom.classList.add('hidden'));
 	document.querySelectorAll('.interface').forEach(dom => dom.classList.remove('hidden'));
-	document.querySelectorAll('canvas').forEach(async (can) => {
+	
 
-		engine = Engine(can);
-		map = engine.add_map();
-		inter = await Interface(engine, map);
-		await inter.init(city_id);
-		//city = await City(engine, map, city_id);
-		//city.init();
-		// Touches.add_listener(can);
-
-
-		engine.render(() => {
-			inter.render();
-		});
-	});
-
-	document.querySelectorAll('.int_btn_construct').forEach(dom => {
-		dom.addEventListener('click', event => {
-			document.querySelectorAll('.int_construct').forEach(dom => {
-				dom.classList.toggle('shown');
-			})
-		});
-	});
+	await inter.init_city(city_id);
 }
+
+
+
 
 async function init_login() {
 	document.querySelectorAll('.auth_type > *').forEach(dom => dom.addEventListener('click', event => {
@@ -107,22 +74,8 @@ async function init_login() {
 			Socket.init();
 		});
 	});
-	// TODO on peut pas se déco reco
 
-	// TODO si on réouvre la connexion dynamiquement on sera pas authentifié faut gérer ça du coup dans socket.js de manière propre
-	let session_id = localStorage.getItem('session_id');
-	if(session_id) {
-		try {
-			let data = await Socket.send('CONNECT', {session_id: session_id});
-			if(data.success) {
-				init_player(data.city_id);
-			} else {
-				localStorage.removeItem('session_id')
-			}// TOdo les try catch c'est caca. Se mettre d'acord avec thomas pour utiliser error que pour des erreurs type réseau pas prévues. Pas pour juste "j'ai pas pu me logger" ou "j'ai pas pu construire ça"
-		} catch {
-			localStorage.removeItem('session_id')
-		}
-	}
+
 	document.querySelectorAll('.authentification form').forEach(dom => {
 		dom.addEventListener('submit', async event => {
 			event.preventDefault();
@@ -130,12 +83,23 @@ async function init_login() {
 			if(dom.type.value == 'register') {
 				let data = await Socket.send('REGISTER', {user: dom.login.value, password: dom.passwd.value});
 			}
-			let data = await Socket.send('CONNECT', {user: dom.login.value, password: dom.passwd.value});
-			if(data.success) {
-				localStorage.setItem('session_id', data.session_id)
-				init_player(data.city_id);
+			let data = await Socket.authenticate({user: dom.login.value, password: dom.passwd.value});
+			if(data !== null) {
+				init_player(data);
 			}
 		});
 	});
-	document.querySelectorAll('.loading').forEach((dom) => dom.classList.add('fade'));
+}
+async function init_engine() {
+	document.querySelectorAll('canvas').forEach(async (can) => {
+		let engine = Engine(can);
+		let map = engine.add_map();
+		inter = await Interface(engine, map);
+
+		engine.render(() => {
+			inter.render();
+		});
+
+		return inter;
+	});
 }

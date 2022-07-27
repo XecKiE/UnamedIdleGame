@@ -47,6 +47,7 @@ const Engine = function(_dom, _options = {}) {
 	loop();
 
 
+
 	function resize(event) {
 		width = can.offsetWidth;
 		height = can.offsetHeight;
@@ -109,7 +110,7 @@ const Engine = function(_dom, _options = {}) {
 		}
 	}
 
-	function draw(sprite_id, x, y, w, h, rotation = 0) {
+	function draw(sprite_id, x, y, w, h, rotation = 0, animation = 0) {
 		let sprite = Resources.get_img(sprite_id);
 		ctx.save();
 		ctx.translate(x + width/2, y + height/2);
@@ -117,7 +118,11 @@ const Engine = function(_dom, _options = {}) {
 			ctx.rotate(rotation);
 		}
 		// ctx.scale(...mirror);
-		ctx.drawImage(sprite, -w/2, -h/2, w, h);
+		if(animation) {
+			ctx.drawImage(sprite, 0, (Math.floor((fps.dt*8))%4)*(sprite.naturalHeight/animation), sprite.naturalWidth, sprite.naturalHeight/animation, -w/2, -h/2, w, h);
+		} else {
+			ctx.drawImage(sprite, -w/2, -h/2, w, h);
+		}
 		ctx.restore();
 	}
 
@@ -146,6 +151,8 @@ const Engine = function(_dom, _options = {}) {
 		render: (callback) => listeners.render.push(callback),
 
 		add_map: () => Map(can),
+
+		force_resize: resize,
 	}
 }
 

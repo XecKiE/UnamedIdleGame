@@ -26,26 +26,23 @@ async function _register(options) {
 async function _checkConnection(options) {
 	console.log(options);
 	let user = users.users_list[options.user_id];
-	if (user.connected == false)
-	{
-		if (user.connected == false) {
-			if (await users.users_list[options.user_id].connect(options)) {
-				let row = await db.query(`
-					SELECT city_id
-					FROM cities
-					JOIN users USING(user_id)
-					WHERE user_id = ${db.int(users.users_list[options.user_id].user_id)} LIMIT 1
-				`);
-				return {data: {success: true, data: 'user_connected', city_id: row[0].city_id, session_id: users.users_list[options.user_id].session_id}};
-			}
-			else {
-				return {success: false, error: 'user login/password invalid'};
-			}
+	// if (user.connected == false) {
+		if (await users.users_list[options.user_id].connect(options)) {
+			let row = await db.query(`
+				SELECT city_id
+				FROM cities
+				JOIN users USING(user_id)
+				WHERE user_id = ${db.int(users.users_list[options.user_id].user_id)} LIMIT 1
+			`);
+			return {data: {success: true, data: 'user_connected', city_id: row[0].city_id, session_id: users.users_list[options.user_id].session_id}};
 		}
 		else {
-			return {success: false, error: 'user is already connected'};
+			return {success: false, error: 'user login/password invalid'};
 		}
-	}
+	// }
+	// else {
+	// 	return {success: false, error: 'user is already connected'};
+	// }
 };
 
 export default async (socket_data, user_uuid) => {
