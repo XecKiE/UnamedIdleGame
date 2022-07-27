@@ -70,8 +70,8 @@ export const updateRessources = async (options) => {
 			};
 
 			return result;
-
 		}
+		return false;
 	}
 	else if (options.hasOwnProperty('army_id')) {
 

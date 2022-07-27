@@ -50,6 +50,7 @@ Resources.load_img({
 	'gold': 'img/sprites/gold.png',
 	'wood_camp': 'img/sprites/wood_camp.png',
 	'wood': 'img/sprites/wood.png',
+	'caserne': 'img/sprites/caserne.png',
 })
 Mouse.disable_context_menu();
 window.onload = async function() {

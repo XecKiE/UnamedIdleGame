@@ -8,7 +8,7 @@ const CB = {
 	TEMPLE:      6,
 	PANTHEON:    7,
 	watchtower: 8,
-	CASERNE:     9,
+	caserne:     9,
 	iron_mine:  10,
 	wood_camp: 11,
 	gold_mine: 12,
@@ -58,6 +58,34 @@ for(let i in CT) {
 	CTR[CT[i]] = i;
 }
 
+const Unit = {
+	soldier:       1,
+	archer:       2,
+	horseman:     3,
+}
+
+const UnitR = {};
+for(let i in Unit) {
+	UnitR[Unit[i]] = i;
+}
+
+const UnitPrice = {
+	soldier:	{
+		iron: 10,
+		wood: 10,
+		gold: 2,
+	},
+	archer:		{
+		iron: 10,
+		wood: 10,
+		gold: 2,
+	},
+	horseman:	{
+		iron: 10,
+		wood: 10,
+		gold: 2,
+	},
+}
 
 export const checkOptions = (options, needed) => {
 	let has = true;
@@ -73,6 +101,7 @@ export {
 	CB,
 	CBR,
 	economyProduction,
+	Unit,
 }
 
 

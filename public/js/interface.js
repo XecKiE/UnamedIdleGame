@@ -19,6 +19,7 @@ const Interface = async function(_engine, _map) {
 		'gold_mine',
 		'wood_camp',
 		'autel',
+		'caserne',
 	];
 
 	let selection = null;
@@ -51,10 +52,12 @@ const Interface = async function(_engine, _map) {
 	}
 
 	function click(x, y, button) {
+		console.log('on click linterface');
 		if(selection) {
 			console.log(x, y);
 			selection.onclick(x, y, button);
 		}
+		city_list[curent_city_id].click(x, y, button);
 	}
 
 	function coord_to_tile(x, y) {

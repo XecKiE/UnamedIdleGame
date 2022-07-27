@@ -12,15 +12,6 @@ const City = async function(_engine, _map, _city_id) {
 	let ressources_qte = {};
 	let ressources_prd = {};
 
-	let available_buildings = [
-		'house',
-		'watchtower',
-		'iron_mine',
-		'gold_mine',
-		'wood_camp',
-		'autel',
-	];
-
 	let selection = null;
 	let clicked_tile = null;
 	let options = {
@@ -104,10 +95,9 @@ const City = async function(_engine, _map, _city_id) {
 	}
 
 	function click(x, y, button) {
-		if(selection) {
-			console.log(x, y);
-			selection.onclick(x, y, button);
-		}
+		console.log('on click la ville');
+		let tile = coord_to_tile(map.screen_to_x(x), map.screen_to_y(y));
+		tiles[x][y].onclick();
 	}
 
 	function coord_to_tile(x, y) {
