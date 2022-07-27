@@ -74,6 +74,14 @@ async function init_login() {
 			Socket.init();
 		});
 	});
+	
+	let session_id = localStorage.getItem('session_id');
+	if(session_id) {
+		let data = await Socket.authenticate({'session_id': session_id});
+		if(data !== null) {
+			init_player(data);
+		}
+	}
 
 
 	document.querySelectorAll('.authentification form').forEach(dom => {

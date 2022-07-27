@@ -4,18 +4,20 @@ const Socket = function() {
 	let timeout = 2000;
 	let timeout_id = null;
 	let reconnect = false;
+	let authentified = false;
 
+	let queue = [];
 	let promises = [];
 
 
 	init();
-	// TODO si on réouvre la connexion on sera pas authentifié faut gérer ça du coup
+
+
 
 	function init() {
 		if (timeout_id !== null) {
 			clearTimeout(timeout_id);
 			timeout_id = null;
-			reconnect = true;
 		}
 		let ws_url = window.location.protocol.replace('http', 'ws')+'//'+window.location.hostname;
 		if(window.location.hostname == 'localhost' || window.location.hostname == '127.0.0.1') {
@@ -29,27 +31,24 @@ const Socket = function() {
 	}
 
 	async function onopen(event) {
-		if (reconnect) {
-			reconnect = false;
+		if(reconnect) {
 			let session_id = localStorage.getItem('session_id');
 			if(session_id) {
-				authenticate();
+				authenticate({'session_id': session_id});
 			}
 		}
-		// let data = await send('CONNECT', {user:'test', password:'test'});
-		// TODO ajouter une queue dans que pas authentifié
 	}
 	async function onerror(event) {
-		// TODO relancer init toutes les 2-4-8-16-32-64-... secondes
+		console.error(event);
 	}
 	async function onclose(event) {
+		authentified = false;
+		reconnect = true;
 		timeout_id = setTimeout(function() { init(); }, timeout);
 		timeout *= 2;
 		document.querySelectorAll('.opt_reload').forEach(dom => {
 			dom.classList.remove('hidden');
 		});
-		
-		// TODO relancer init toutes les 2-4-8-16-32-64-... secondes
 	}
 	async function onmessage(event) {
 		let data = JSON.parse(event.data);
@@ -70,6 +69,7 @@ const Socket = function() {
 
 
 	async function send(action, options = {}) {
+		console.log(action)
 		return new Promise((resolve, reject) => {
 			promises[message_increment] = {
 				resolve: resolve,
@@ -80,18 +80,32 @@ const Socket = function() {
 				action: action,
 				options: options,
 			}
-			socket.send(JSON.stringify(data));
+			if(authentified || action == 'CONNECT' || action == 'REGISTER') {
+				send_message(data);
+			} else {
+				queue.push(data);
+			}
 			message_increment++;
 		});
 	}
 
+	async function send_message(data) {
+		socket.send(JSON.stringify(data));
+	}
+
 	async function authenticate(credentials = null) {
 		let data = await Socket.send('CONNECT', credentials ? credentials : {session_id: localStorage.getItem('session_id')});
-		console.log(data);
 		if(data.success) {
+			authentified = true;
 			localStorage.setItem('session_id', data.session_id)
+			// On vide la queue
+			let message;
+			while(message = queue.pop()) {
+				send_message(message);
+			}
 			return data.city_id;
 		} else {
+			authentified = false;
 			localStorage.removeItem('session_id')
 			return false;
 		}
