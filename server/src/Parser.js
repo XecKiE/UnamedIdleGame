@@ -2,6 +2,7 @@ import * as build from './Buildings.js';
 import * as users from './User.js';
 import * as get from './Get.js';
 import * as db from './DB.js';
+import * as armies from './Armies.js';
 
 
 const func_map = {
@@ -16,6 +17,9 @@ const func_map = {
 		'PLAYER_CITIES': get.playerCities,
 		'CITY_RESSOURCE': get.cityRessource
 	},
+	'UNIT': {
+		'RECRUT': armies.recrutUnit
+	}
 
 };
 

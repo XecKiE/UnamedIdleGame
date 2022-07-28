@@ -6,7 +6,7 @@ export const updateCityArmy = async (options) => {
 
 }
 
-export const buildUnit = async (options) => {
+export const recrutUnit = async (options) => {
 	//je pense qu'il faut un building_id pour atacher une unit_queue a un building
 	if (shared.checkOptions(options, ['city_id', 'unit_type'])) {
 		let ressource = economy.updateRessources({city_id:options.city_id});

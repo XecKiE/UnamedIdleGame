@@ -1,6 +1,6 @@
 import {Random, Mouse} from './engine/main.js'
 import Socket from './socket.js';
-import {CB, CBR} from './shared/Shared.js'
+import {Unit} from './shared/Shared.js'
 import City from './city.js';
 
 const Interface = async function(_engine, _map) {
@@ -79,9 +79,28 @@ const Interface = async function(_engine, _map) {
 			close.addEventListener('click', function (event) {
 				dom.classList.add('hidden');
 			});
+
+			let army_list = document.createElement('div');
+			army_list.classList.add('army_recrut_list');
+
+			Object.entries(Unit).forEach(function (troop) {
+				console.log('on passe sur '+troop);
+				let troop_div = document.createElement('div');
+				troop_div.classList.add('troop_army_recrut');
+				troop_div.innerText = troop[0];
+				troop_div.addEventListener('click', async function() {
+					let options = {
+						'city_id': curent_city_id,
+						'unit_type': troop[1]
+					};
+					await Socket.send('UNIT RECRUT', options);
+				})
+				army_list.appendChild(troop_div);
+			});
 			dom.appendChild(head);
 			dom.appendChild(close);
-
+			dom.appendChild(army_list);
+		
 		});
 	}
 
@@ -99,7 +118,6 @@ const Interface = async function(_engine, _map) {
 			});
 			dom.appendChild(head);
 			dom.appendChild(close);
-
 		});
 	}
 

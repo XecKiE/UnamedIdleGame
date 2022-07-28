@@ -32,6 +32,25 @@
 	color: red;
 	font-size: 2em;
 }
+
+.floating_menu .army_recrut_list {
+	display: flex;
+	border-color: white;
+    background-color: grey;
+    width: 90%;
+    height: 30%;
+    position: relative;
+    left: 5%;
+}
+
+.floating_menu .army_recrut_list .troop_army_recrut {
+	width: 10%;
+    text-align: center;
+    border: solid 1px black;
+}
+
+
+
 .floating_menu .floating_header {
 	text-align: center;
 	text-decoration: underline;
