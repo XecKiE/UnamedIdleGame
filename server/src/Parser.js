@@ -15,7 +15,8 @@ const func_map = {
 	'GET': {
 		'CITY_TILE': get.cityTyle,
 		'PLAYER_CITIES': get.playerCities,
-		'CITY_RESSOURCE': get.cityRessource
+		'CITY_RESSOURCE': get.cityRessource,
+		'RECRUT_LIST': get.recrutList,
 	},
 	'UNIT': {
 		'RECRUT': armies.recrutUnit
@@ -66,9 +67,7 @@ export default async (socket_data, user_uuid) => {
 	console.log(data.action.split(' '));
 	try {
 		data.options.user_id = user_uuid;
-		console.log(data)
 		var ret = await data.action.split(' ').reduce((a, b) => a[b], func_map)(data.options);
-		console.log(ret);
 		if (ret.error) {
 			response.error = ret; 
 		}

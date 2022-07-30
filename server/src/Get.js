@@ -3,6 +3,7 @@ import * as shared from './../../public/js/shared/Shared.js';
 import * as D from './D.js';
 import * as users from './User.js';
 import * as economy from './Economy.js';
+import * as armies from './Armies.js';
 
 export const cityTyle = async (options) => {
 	if(shared.checkOptions(options, ['city_id'])) {
@@ -34,8 +35,7 @@ export const cityTyle = async (options) => {
 
 export const playerCities = async (options) => {
 	let where_sql = ``;
-	console.log(options);
-	console.log(shared.checkOptions(options, ['city_id']))
+
 	let is_city_id = shared.checkOptions(options, ['city_id']);
 	if(is_city_id === true) {
 		where_sql = `c.city_id = ${db.int(options.city_id)}`;
@@ -43,7 +43,7 @@ export const playerCities = async (options) => {
 	else {
 		where_sql = `c.user_id = ${db.int(users.users_list[options.user_id].user_id)}`
 	}
-	console.log(where_sql);
+
 		let rows = await db.query(`
 			SELECT c.city_id, c.city_x, c.city_y, c.city_name,
 				r.iron_quantity, r.wood_quantity, r.gold_quantity,
@@ -94,4 +94,35 @@ export const cityRessource = async (options) => {
 	if(shared.checkOptions(options, ['city_id'])) {
 
 	}
+}
+
+export const recrutList = async (options) => {
+	if(shared.checkOptions(options, ['city_id'])) {
+		let time_reduction = await armies.updateCityArmy(options);
+		let lines = await db.query(`
+			SELECT u.unit_id, u.unit_type, UNIX_TIMESTAMP(uq.date_creation) as date_creation
+			FROM cities c
+			JOIN armies_unit au
+				ON au.army_id = c.army_id
+			JOIN unit_queue uq
+				ON uq.unit_id = au.unit_id
+			JOIN units u
+				ON u.unit_id = uq.unit_id
+			WHERE c.city_id = ${db.int(options.city_id)}
+		`);
+		let data = {
+			timeReduction: parseInt(time_reduction),
+			recrutList: []
+		}
+		lines.forEach(function(line) {
+			data.recrutList.push({
+				unitId: line.unit_id,
+				unitType: line.unit_type,
+				dateQueue: parseInt(line.date_creation),
+			});
+		})
+
+		return {data: data};
+	}
+	return {error: 'parametre manquant'};
 }

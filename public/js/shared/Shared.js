@@ -58,15 +58,34 @@ for(let i in CT) {
 	CTR[CT[i]] = i;
 }
 
+//constante armée
 const Unit = {
 	soldier:       1,
 	archer:       2,
 	horseman:     3,
 }
 
+
+
 const UnitR = {};
 for(let i in Unit) {
 	UnitR[Unit[i]] = i;
+}
+
+//reduction du temps en seconde, par niveau
+const caserneTimeReduction = {
+	1: 5,
+	2: 7,
+	3: 9,
+	4: 12,
+	5: 15,
+}
+
+//temps en seconde pour la production d'unitée 
+const unitTimeProduction = {
+	soldier: 400,
+	archer: 600,
+	horseman: 1000,
 }
 
 const UnitPrice = {
@@ -104,6 +123,8 @@ export {
 	Unit,
 	UnitR,
 	UnitPrice,
+	caserneTimeReduction,
+	unitTimeProduction,
 }
 
 

@@ -67,8 +67,8 @@ const Interface = async function(_engine, _map) {
 		}
 	}
 
-	function show_recrutement() {
-		document.querySelectorAll('.floating_menu').forEach(function(dom) {
+	async function  show_recrutement() {
+		document.querySelectorAll('.floating_menu').forEach(async function(dom) {
 			let head = document.createElement('div');
 			head.innerText = 'Recrutement des troupes';
 			head.classList.add('floating_header');
@@ -97,6 +97,14 @@ const Interface = async function(_engine, _map) {
 				})
 				army_list.appendChild(troop_div);
 			});
+
+			let army_queue_list = document.createElement('div');
+			army_queue_list.classList.add('army_queue_list');
+			let recrut_list = await Socket.send('GET RECRUT_LIST', {'city_id': curent_city_id});
+			/*recrut_list.forEach(function (queue) {
+				
+			});*/
+
 			dom.appendChild(head);
 			dom.appendChild(close);
 			dom.appendChild(army_list);
