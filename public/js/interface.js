@@ -1,6 +1,6 @@
 import {Random, Mouse} from './engine/main.js'
 import Socket from './socket.js';
-import {Unit} from './shared/Shared.js'
+import {Unit, UnitR} from './shared/Shared.js'
 import City from './city.js';
 
 const Interface = async function(_engine, _map) {
@@ -11,6 +11,7 @@ const Interface = async function(_engine, _map) {
 	let city_name = '';
 	let ressources_qte = {};
 	let ressources_prd = {};
+	let troop_list = [];
 
 	let available_buildings = [
 		'house',
@@ -100,15 +101,34 @@ const Interface = async function(_engine, _map) {
 
 			let army_queue_list = document.createElement('div');
 			army_queue_list.classList.add('army_queue_list');
+			army_queue_list.classList.add('army_recrut_list');
 			let recrut_list = await Socket.send('GET RECRUT_LIST', {'city_id': curent_city_id});
-			/*recrut_list.forEach(function (queue) {
+			let div_queue = document.createElement('div');
+			let head_queue = document.createElement('div');
+			head_queue.innerText = 'Troupes en cours de recrutement';
+			head_queue.classList.add('floating_header');
+			console.log(recrut_list);
+			recrut_list.recrutList.forEach(function (queue) {
+				let troop_div = document.createElement('div');
+				troop_div.classList.add('troop_army_recrut');
+				console.log(queue);
+				troop_div.innerText = UnitR[queue.unitType];//troop[0];
+				/*troop_div.addEventListener('click', async function() {
+					let options = {
+						'city_id': curent_city_id,
+						'unit_type': troop[1]
+					};
+					await Socket.send('UNIT RECRUT', options);
+				})*/
 				
-			});*/
+				army_queue_list.appendChild(troop_div);				
+			});
 
 			dom.appendChild(head);
 			dom.appendChild(close);
 			dom.appendChild(army_list);
-		
+			dom.appendChild(head_queue);
+			dom.appendChild(army_queue_list);
 		});
 	}
 
